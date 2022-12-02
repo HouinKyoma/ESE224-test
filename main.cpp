@@ -1,7 +1,9 @@
 #include<iostream>
+using namespace std;
 
 int main(){
-    std::cout<<"Hello world";
-    std::cout<<"My name is Steven!";
-    std::cout<<"My last name is Shi";
+    cout<<"Hello world";
+    cout<<"My name is Steven!";
+    cout<<"My last name is Shi";
+    cout<<"testing";
 }
