@@ -2,8 +2,24 @@
 using namespace std;
 
 int main(){
-    cout<<"Hello world";
-    cout<<"My name is Steven!";
-    cout<<"My last name is Shi";
-    cout<<"testing";
+    //Load from file
+        //load into a BST
+    
+    //login
+        //reader login
+            //print reader menu
+            //        
+
+
+        //librarian login
+            //print lib menu
+                //request new book copy
+                //delete existing copy
+                //search users
+                //add new users
+                //delete old users
+
+
+
+    //when ending, update the txt files 
 }
