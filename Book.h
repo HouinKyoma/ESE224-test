@@ -10,11 +10,17 @@ class Book{
         string author;
         string category;
         string main_key = ISBN;
-    public:
-
-
+        int favor;
 };
 class BookCopy{
+    private:
+        Book book;
+        int ID;
+        string readerName;
+        string reserverName;
+        int reserveDate;
+        
+    
 
 };
 class User{
@@ -23,14 +29,13 @@ class User{
     string username;
     string main_key = username;
     public:
-    Book searchBook(vector<Book> bookList, int id);
 
 };
 class Reader:virtual User{
     private:
     int MAX_COPIES;
     int MAX_BORROW_PERIOD;
-    vector<BookCopy> borroweList;
+    vector<BookCopy> borrowedList;
     int penalty;
     public:
     virtual void setMax_Copies(int n);
@@ -40,15 +45,15 @@ class Reader:virtual User{
 };
 class Student:virtual Reader{
     public:
-        void setMax_Copies(int n);
-        void setMax_Period(int n);
+    void setMax_Copies(int n);
+    void setMax_Period(int n);
 
 
 };
 class Teacher:virtual Reader{
     public:
-        void setMax_Copies(int n);
-        void setMax_Period(int n);
+    void setMax_Copies(int n);
+    void setMax_Period(int n);
 
 
 
@@ -56,11 +61,11 @@ class Teacher:virtual Reader{
 class Librarian:virtual User{
     //ALL subject to change
     public:
-        void addUser();
-        void addBook();
-        void deleteUser(); 
-        void deleteBook();
-        void searchUser();
+    void addUser();
+    void addBook();
+    void deleteUser(); 
+    void deleteBook();
+    void searchUser();
 };
 template<class T>
 class DataHolder{
