@@ -59,7 +59,7 @@ void BST<Comparable>::remove(const Comparable &x, BSTNode<Comparable> *&t) const
         remove(t->data, t->right);
    }
    else{
-        BSTNode* oldNode = t;
+        BSTNode<Comparable> * oldNode = t;
         t = (t->left != nullptr) ? t->left:t->right;
         delete oldNode;
    }
