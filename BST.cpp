@@ -3,11 +3,11 @@
 
 template<typename Comparable>
 void BST<Comparable>::insert(const Comparable &x) {
-    
+   insert(x,root); 
 }
 template <typename Comparable>
 void BST<Comparable>::remove(const Comparable &x) {
-    
+     remove(x,root);
 }
 /**
  * @brief 

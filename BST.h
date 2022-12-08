@@ -20,7 +20,7 @@ class BSTNode
 template <typename Comparable>
 class BST
 {
-    BSTNode *root;
+    BSTNode<Comparable> *root;
 
 public:
     BST();

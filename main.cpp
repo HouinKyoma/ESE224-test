@@ -1,4 +1,5 @@
 #include<iostream>
+#include"BST.h"
 using namespace std;
 
 int main(){
@@ -22,4 +23,9 @@ int main(){
 
 
     //when ending, update the txt files 
+    //testing code 
+    BST<int> bst = BST<int>();
+    bst.insert(1);
+    bst.insert(3);
+    bst.insert(10);
 }
