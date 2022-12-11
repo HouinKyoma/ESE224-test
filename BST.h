@@ -23,8 +23,7 @@ class BST
     BSTNode<Comparable> *root;
 
 public:
-    BST();
-    ~BST();
+    };
     void insert(const Comparable &x);
     void remove(const Comparable &x);
 
