@@ -19,6 +19,10 @@ class BookCopy{
         string readerName;
         string reserverName;
         int reserveDate;
+        int startDate;
+        int expDate;
+    public:
+        bool operator<(const BookCopy& book2);
         
     
 
