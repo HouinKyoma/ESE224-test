@@ -19,9 +19,9 @@ void BST<Comparable>::remove(const Comparable &x) {
  * the method will set the new subtree root
  */
 template <typename Comparable>
-void BST<Comparable>::insert(const Comparable &x, BSTNode<Comparable>*&t) const {
+void BST<Comparable>::insert(const Comparable& x, BSTNode<Comparable>*& t) const {
     if( t == nullptr){
-        t = new BSTNode(x);
+        t = new BSTNode<Comparable>(x);
 
     }
     else if(x < t->data){
@@ -66,3 +66,18 @@ void BST<Comparable>::remove(const Comparable &x, BSTNode<Comparable> *&t) const
 }
 
 
+
+template <typename Comparable>
+BSTNode<Comparable> * BST<Comparable>::  findMin( BSTNode<Comparable> *t) const{
+     if (t!=nullptr){
+          while(t->left !=nullptr){
+               t = t->left;
+          }
+          return t;
+     }
+}
+
+template <typename Comparable>
+const Comparable& BST<Comparable>:: findMin() const{
+     return findMin(root);
+}

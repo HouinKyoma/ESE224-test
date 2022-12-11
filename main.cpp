@@ -1,5 +1,6 @@
 #include<iostream>
 #include"BST.h"
+#include"BST.cpp"
 using namespace std;
 
 int main(){
@@ -28,4 +29,7 @@ int main(){
     bst.insert(1);
     bst.insert(3);
     bst.insert(10);
+    bst.remove(1);
+    bst.insert(0);
+    bst.remove(3);
 }
