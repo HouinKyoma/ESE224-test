@@ -13,8 +13,8 @@ class Book{
         int favor;
 
     public:
-        
-        string iSBN() const { return ISBN; }
+        //----------------setter/getters--------------------
+        string getISBN() const { return ISBN; }
         void setISBN(const string &iSBN) { ISBN = iSBN; }
 
         string getTitle() const { return title; }
@@ -25,6 +25,16 @@ class Book{
 
         string getCategory() const { return category; }
         void setCategory(const string &category_) { category = category_; }
+        //--------------------operators---------------------------
+        bool operator<(const Book& book2);
+
+        //-------------------class methods----------------------
+        void favorCount(){favor++;};
+
+        Book(){
+            favor = 0;
+        };
+        ~Book(){};
         
 };
 class BookCopy{
@@ -37,12 +47,23 @@ class BookCopy{
         int startDate;
         int expDate;
     public:
+    //-----------------------constructors---------------
+        BookCopy(){
+
+        };
+        ~BookCopy(){};
+    //---------------------operators--------------------
         bool operator<(const BookCopy& book2);
+
+
+
+
+        //--------getter/setters-------------------------
 
         Book getBook() const { return book; }
         void setBook(const Book &book_) { book = book_; }
 
-        int iD() const { return ID; }
+        int getID() const { return ID; }
         void setID(int iD) { ID = iD; }
 
         string getReaderName() const { return readerName; }
@@ -113,6 +134,10 @@ class Librarian:virtual User{
     void deleteBook();
     void searchUser();
 };
+
+/*
+
+//----THIS class will be replaced by BST-----
 template<class T>
 class DataHolder{
     //book bookcopies users
@@ -123,7 +148,7 @@ class DataHolder{
         user: username
     
     
-    */
+    
     public:
         int main_key = T.main_key;
         DataHolder search(T.main_key, BST& list);
@@ -132,3 +157,4 @@ class DataHolder{
         DataHolder searchBook(vector<string> keys);
 
 };
+*/

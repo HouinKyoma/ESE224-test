@@ -31,11 +31,13 @@ public:
     void remove(const Comparable &x);
     const Comparable & findMin() const;
     const Comparable & findMax() const;
+    bool contains(const Comparable &x) const;
 
 private:
     void insert(const Comparable &x, BSTNode<Comparable>*&t) const;
     void remove(const Comparable &x, BSTNode<Comparable>*&t) const;
     BSTNode<Comparable> * findMin( BSTNode<Comparable> *t) const;
     BSTNode<Comparable> * findMax( BSTNode<Comparable> *t) const;
+    bool contains(const Comparable&x, BSTNode<Comparable> *t)const;
 };
 

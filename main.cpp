@@ -1,6 +1,7 @@
 #include<iostream>
 #include"BST.h"
 #include"BST.cpp"
+#include"Book.h"
 using namespace std;
 
 int main(){
@@ -32,4 +33,11 @@ int main(){
     bst.remove(1);
     bst.insert(0);
     bst.remove(3);
+    string s = "9781283329705";
+    string s2 = "9781493938438	";
+    long int isbn = stol(s);
+    long int isbn2 = stol(s2);
+    cout<<isbn;
+    cout<<isbn2<<endl;;
+    cout<<(isbn<isbn2);
 }

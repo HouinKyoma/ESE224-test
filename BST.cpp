@@ -81,3 +81,29 @@ template <typename Comparable>
 const Comparable& BST<Comparable>:: findMin() const{
      return findMin(root);
 }
+
+/**
+ * @brief 
+ * Internal method, for recursively find
+ * @tparam Comparable 
+ * @param x item to search for
+ * @param t root of the subtree
+ * @return true 
+ * @return false 
+ */
+template <typename Comparable>
+bool BST<Comparable>::contains(const Comparable&x, BSTNode<Comparable> *t)const{
+     if(t == nullptr){
+          return false;
+     }
+     else if(t->data<x){
+          return contains(x,t->left);
+     }
+     else if(x<t->data){
+          return contains(x,t->right);
+     }
+     else 
+          return true;
+
+
+}
