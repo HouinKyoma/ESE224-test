@@ -11,6 +11,21 @@ class Book{
         string category;
         string main_key = ISBN;
         int favor;
+
+    public:
+        
+        string iSBN() const { return ISBN; }
+        void setISBN(const string &iSBN) { ISBN = iSBN; }
+
+        string getTitle() const { return title; }
+        void setTitle(const string &title_) { title = title_; }
+
+        string getAuthor() const { return author; }
+        void setAuthor(const string &author_) { author = author_; }
+
+        string getCategory() const { return category; }
+        void setCategory(const string &category_) { category = category_; }
+        
 };
 class BookCopy{
     private:
@@ -23,6 +38,27 @@ class BookCopy{
         int expDate;
     public:
         bool operator<(const BookCopy& book2);
+
+        Book getBook() const { return book; }
+        void setBook(const Book &book_) { book = book_; }
+
+        int iD() const { return ID; }
+        void setID(int iD) { ID = iD; }
+
+        string getReaderName() const { return readerName; }
+        void setReaderName(const string &readerName_) { readerName = readerName_; }
+
+        string getReserverName() const { return reserverName; }
+        void setReserverName(const string &reserverName_) { reserverName = reserverName_; }
+
+        int getReserveDate() const { return reserveDate; }
+        void setReserveDate(int reserveDate_) { reserveDate = reserveDate_; }
+
+        int getStartDate() const { return startDate; }
+        void setStartDate(int startDate_) { startDate = startDate_; }
+
+        int getExpDate() const { return expDate; }
+        void setExpDate(int expDate_) { expDate = expDate_; }
         
     
 
@@ -32,6 +68,12 @@ class User{
     string password;
     string username;
     string main_key = username;
+public:
+    
+    string getPassword() const { return password; }
+    void setPassword(const string &password_) { password = password_; }
+    string getUsername() const { return username; }
+    void setUsername(const string &username_) { username = username_; }
     public:
 
 };
