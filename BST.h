@@ -1,4 +1,6 @@
 #pragma once
+#include<vector>
+#include<string>
 template <typename Comparable>
 class BSTNode
 {   public:
@@ -32,6 +34,8 @@ public:
     const Comparable & findMin() const;
     const Comparable & findMax() const;
     bool contains(const Comparable &x) const;
+    Comparable* search(const Comparable &x) const;
+    Comparable* searchBook(std::vector<std::string>& searchArgs);
 
 private:
     void insert(const Comparable &x, BSTNode<Comparable>*&t) const;
@@ -39,5 +43,6 @@ private:
     BSTNode<Comparable> * findMin( BSTNode<Comparable> *t) const;
     BSTNode<Comparable> * findMax( BSTNode<Comparable> *t) const;
     bool contains(const Comparable&x, BSTNode<Comparable> *t)const;
+    Comparable* search(const Comparable&x, BSTNode<Comparable> *t)const;
 };
 

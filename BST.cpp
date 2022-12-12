@@ -107,3 +107,31 @@ bool BST<Comparable>::contains(const Comparable&x, BSTNode<Comparable> *t)const{
 
 
 }
+
+template <typename Comparable>
+bool BST<Comparable>::contains(const Comparable&x)const{
+     return contains(x, root);
+
+}
+
+template <typename Comparable>
+Comparable* BST<Comparable>::search(const Comparable& x)const{
+     return search(x,root);
+}
+template <typename Comparable>
+Comparable* BST<Comparable>::search(const Comparable&x, BSTNode<Comparable> *t)const{
+     if(t == nullptr){
+          return nullptr;
+     }
+     else if(t->data<x){
+          return search(x,t->left);
+     }
+     else if(x<t->data){
+          return search(x,t->right);
+     }
+     else {
+          Comparable* ret = &(t->data);
+          return ret;
+     }
+
+}

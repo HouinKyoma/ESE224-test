@@ -2,6 +2,8 @@
 #include<string>
 #include<vector>
 #include<iostream>
+#include<list>
+class User;
 using namespace std;
 class Book{
     private:
@@ -10,8 +12,8 @@ class Book{
         string author;
         string category;
         string main_key = ISBN;
-        int favor;
-
+        int favor;//we assume favorite count will not be saved and read from txt files
+        list<User> readers;
     public:
         //----------------setter/getters--------------------
         string getISBN() const { return ISBN; }
@@ -30,17 +32,38 @@ class Book{
 
         //-------------------class methods----------------------
         void favorCount(){favor++;};
-
+        
         Book(){
             favor = 0;
         };
         ~Book(){};
+
+        friend std::ostream &operator<<(std::ostream &os, const Book &rhs) {
+            os << "ISBN: " << rhs.ISBN
+               << " title: " << rhs.title
+               << " author: " << rhs.author
+               << " category: " << rhs.category;
+            return os;
+        }
+        friend std::istream &operator>>(std::istream &is,  Book &rhs){
+            string ISBN;
+            string title;
+            string author;
+            string category;
+            is>>ISBN>>title>>author>>category;
+            rhs.setISBN(ISBN);
+            rhs.setTitle(title);
+            rhs.setAuthor(author);
+            rhs.setCategory(category);
+            return is;
+        }
         
 };
 class BookCopy{
     private:
         Book book;
         int ID;
+        string isbn;//for temp input<< purpose
         string readerName;
         string reserverName;
         int reserveDate;
@@ -54,7 +77,25 @@ class BookCopy{
         ~BookCopy(){};
     //---------------------operators--------------------
         bool operator<(const BookCopy& book2);
-
+        friend std::ostream &operator<<(std::ostream &os, const BookCopy &rhs) {
+            os << "book: " << rhs.book
+               << " ID: " << rhs.ID
+               << " readerName: " << rhs.readerName
+               << " reserverName: " << rhs.reserverName
+               << " reserveDate: " << rhs.reserveDate
+               << " startDate: " << rhs.startDate
+               << " expDate: " << rhs.expDate;
+            return os;
+        }
+        friend std::istream& operator>>(std::istream &is,  BookCopy &rhs){
+            string ISBN;
+            int id;
+            is >> ISBN >> id;
+            rhs.setID(id);
+            rhs.setISBN(ISBN);//we are only getting ISBN here? additional work will have to be done to set the Book member with according isbn
+            return is;
+        }
+        
 
 
 
@@ -62,7 +103,7 @@ class BookCopy{
 
         Book getBook() const { return book; }
         void setBook(const Book &book_) { book = book_; }
-
+        void setISBN(const string &isbn_) {isbn = isbn_; }
         int getID() const { return ID; }
         void setID(int iD) { ID = iD; }
 
@@ -80,61 +121,11 @@ class BookCopy{
 
         int getExpDate() const { return expDate; }
         void setExpDate(int expDate_) { expDate = expDate_; }
-        
+
+       
     
 
 };
-class User{
-    private:
-    string password;
-    string username;
-    string main_key = username;
-public:
-    
-    string getPassword() const { return password; }
-    void setPassword(const string &password_) { password = password_; }
-    string getUsername() const { return username; }
-    void setUsername(const string &username_) { username = username_; }
-    public:
-
-};
-class Reader:virtual User{
-    private:
-    int MAX_COPIES;
-    int MAX_BORROW_PERIOD;
-    vector<BookCopy> borrowedList;
-    int penalty;
-    public:
-    virtual void setMax_Copies(int n);
-    virtual void setMax_Period(int n);
-
-    
-};
-class Student:virtual Reader{
-    public:
-    void setMax_Copies(int n);
-    void setMax_Period(int n);
-
-
-};
-class Teacher:virtual Reader{
-    public:
-    void setMax_Copies(int n);
-    void setMax_Period(int n);
-
-
-
-};
-class Librarian:virtual User{
-    //ALL subject to change
-    public:
-    void addUser();
-    void addBook();
-    void deleteUser(); 
-    void deleteBook();
-    void searchUser();
-};
-
 /*
 
 //----THIS class will be replaced by BST-----
