@@ -4,6 +4,7 @@
 #include<iostream>
 #include<list>
 #include"Book.h"
+
 using namespace std;
 class BookCopy;
 class User{
@@ -25,6 +26,7 @@ class User{
         return is;
     }   
     
+    bool operator<(const User& user2)const;
 
 };
 class Reader:public virtual User{

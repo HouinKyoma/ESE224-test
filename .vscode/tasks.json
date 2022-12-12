@@ -7,7 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "main.cpp","BST.h","BST.cpp","Book.cpp","Book.h","User.h",
+                "main.cpp","BST.h","BST.cpp","Book.cpp","Book.h","User.h","User.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

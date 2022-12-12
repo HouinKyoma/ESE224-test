@@ -5,6 +5,7 @@
 #include"Book.h"
 #include"User.h"
 using namespace std;
+BST<User> users;
 void scanFile(){
     int type;
 	ifstream fin("student.txt");
@@ -21,13 +22,16 @@ void scanFile(){
 		fin >> type;
 		if (type == 0) {
 		    fin >> student;
+            users.insert(student);
 		//	//teacherList.push_back(myTeacher);
 		}
 		else if( type == 1) {
 			fin >> teacher;
+            users.insert(teacher);
         }
         else {
             fin>>lib;
+            users.insert(lib);
 
         }
 	} while (!fin.eof());
@@ -75,5 +79,6 @@ int main(){
     cout<<isbn2<<endl;
     cout<<(isbn<isbn2);
     //--------------------testing for file input ------------------
+    users = BST<User>();
     scanFile();
 }

@@ -27,7 +27,7 @@ void BST<Comparable>::insert(const Comparable& x, BSTNode<Comparable>*& t) const
     else if(x < t->data){
         insert(x, t->left);
     }
-    else if(x > t->data){
+    else if(t->data < x){
         insert(x, t->right);
     }
     else
