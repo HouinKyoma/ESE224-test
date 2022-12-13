@@ -135,3 +135,29 @@ Comparable* BST<Comparable>::search(const Comparable&x, BSTNode<Comparable> *t)c
      }
 
 }
+
+template <typename Comparable>
+Comparable* BST<Comparable>::search(const std::string& key)const{
+     return search(key, root);
+}
+
+template <typename Comparable>
+Comparable* BST<Comparable>::search(const std::string& key, BSTNode<Comparable> *t)const{
+     if(t == nullptr){
+          return nullptr;
+     }
+     else if(t->data->getKey()<key){
+          return search(key,t->left);
+     }
+     else if(key<t->data->getKey()){
+          return search(key,t->right);
+     }
+     else {
+          Comparable* ret = &(t->data);
+          return ret;
+     }
+
+
+
+
+}

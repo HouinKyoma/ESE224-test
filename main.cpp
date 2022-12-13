@@ -5,7 +5,9 @@
 #include"Book.h"
 #include"User.h"
 using namespace std;
-BST<User> users;
+BST<User*> users;
+BST<Book> books;
+BST<BookCopy> copys;
 void scanFile(){
     int type;
 	ifstream fin("student.txt");
@@ -14,24 +16,29 @@ void scanFile(){
 		exit(1);
 	}
 
-	//Teacher myTeacher;
-	Student student;
-    Teacher teacher;
-    Librarian lib;
 	do {
 		fin >> type;
 		if (type == 0) {
-		    fin >> student;
-            users.insert(student);
-		//	//teacherList.push_back(myTeacher);
+
+            Student* student = new Student();
+		    fin >> *(student);
+            User* user = student;
+            users.insert(user);
 		}
 		else if( type == 1) {
-			fin >> teacher;
-            users.insert(teacher);
+
+            Teacher* teacher= new Teacher();
+
+			fin >> *(teacher);
+            User* user = teacher;
+            users.insert(user);
         }
         else {
-            fin>>lib;
-            users.insert(lib);
+
+            Librarian* lib = new Librarian();
+            fin>>*(lib);
+            User* user = lib;
+            users.insert(user);
 
         }
 	} while (!fin.eof());
@@ -79,6 +86,11 @@ int main(){
     cout<<isbn2<<endl;
     cout<<(isbn<isbn2);
     //--------------------testing for file input ------------------
-    users = BST<User>();
+    users = BST<User*>();
+    books = BST<Book>();
+    copys = BST<BookCopy>();
     scanFile();
+    User** u = users.search("James");
+    Teacher* t =dynamic_cast<Teacher*>(*(u));
+    t->setMax_Period(1);
 }

@@ -27,6 +27,8 @@ class Book{
 
         string getCategory() const { return category; }
         void setCategory(const string &category_) { category = category_; }
+
+        string getKey() const{return main_key;}
         //--------------------operators---------------------------
         bool operator<(const Book& book2);
 
@@ -66,6 +68,7 @@ class BookCopy{
         string isbn;//for temp input<< purpose
         string readerName;
         string reserverName;
+        string main_key = to_string(ID);
         int reserveDate;
         int startDate;
         int expDate;
@@ -122,6 +125,7 @@ class BookCopy{
         int getExpDate() const { return expDate; }
         void setExpDate(int expDate_) { expDate = expDate_; }
 
+        string getKey()const {return main_key;}
        
     
 

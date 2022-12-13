@@ -35,6 +35,7 @@ public:
     const Comparable & findMax() const;
     bool contains(const Comparable &x) const;
     Comparable* search(const Comparable &x) const;
+    Comparable* search(const std::string &key) const;
     Comparable* searchBook(std::vector<std::string>& searchArgs);
 
 private:
@@ -44,5 +45,6 @@ private:
     BSTNode<Comparable> * findMax( BSTNode<Comparable> *t) const;
     bool contains(const Comparable&x, BSTNode<Comparable> *t)const;
     Comparable* search(const Comparable&x, BSTNode<Comparable> *t)const;
+    Comparable* search(const std::string& key, BSTNode<Comparable> *t)const;
 };
 
