@@ -14,7 +14,7 @@ class User{
     string main_key = username;
     public:
     string getKey() const{return main_key;}
-    
+    void setKey(){main_key = username;}
     string getPassword() const { return password; }
     void setPassword(const string &password_) { password = password_; }
     string getUsername() const { return username; }
@@ -24,7 +24,7 @@ class User{
         is>>name>>password;
         rhs.setPassword(password);
         rhs.setUsername(name);
-        
+        rhs.setKey(); 
         return is;
     }   
     

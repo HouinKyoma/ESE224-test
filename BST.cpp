@@ -135,7 +135,13 @@ Comparable* BST<Comparable>::search(const Comparable&x, BSTNode<Comparable> *t)c
      }
 
 }
-
+/**
+ * @brief using a recursive call, find the object in the BST, if not exist, the return is nullptr 
+ * 
+ * @tparam Comparable 
+ * @param key search using the main_key of objects 
+ * @return Comparable* the return of the function is a pointer to an object
+ */
 template <typename Comparable>
 Comparable* BST<Comparable>::search(const std::string& key)const{
      return search(key, root);

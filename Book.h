@@ -29,8 +29,9 @@ class Book{
         void setCategory(const string &category_) { category = category_; }
 
         string getKey() const{return main_key;}
+        void setKey() {main_key = ISBN;}
         //--------------------operators---------------------------
-        bool operator<(const Book& book2);
+        bool operator<(const Book& book2)const;
 
         //-------------------class methods----------------------
         void favorCount(){favor++;};
@@ -57,6 +58,7 @@ class Book{
             rhs.setTitle(title);
             rhs.setAuthor(author);
             rhs.setCategory(category);
+
             return is;
         }
         
@@ -79,7 +81,7 @@ class BookCopy{
         };
         ~BookCopy(){};
     //---------------------operators--------------------
-        bool operator<(const BookCopy& book2);
+        bool operator<(const BookCopy& book2)const;
         friend std::ostream &operator<<(std::ostream &os, const BookCopy &rhs) {
             os << "book: " << rhs.book
                << " ID: " << rhs.ID
@@ -106,6 +108,7 @@ class BookCopy{
 
         Book getBook() const { return book; }
         void setBook(const Book &book_) { book = book_; }
+        string getISBN() const{return isbn;}
         void setISBN(const string &isbn_) {isbn = isbn_; }
         int getID() const { return ID; }
         void setID(int iD) { ID = iD; }
@@ -126,7 +129,7 @@ class BookCopy{
         void setExpDate(int expDate_) { expDate = expDate_; }
 
         string getKey()const {return main_key;}
-       
+        void setKey(){main_key = to_string(ID);}
     
 
 };

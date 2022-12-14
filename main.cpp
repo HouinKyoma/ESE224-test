@@ -6,8 +6,13 @@
 #include"User.h"
 using namespace std;
 BST<User*> users;
-BST<Book> books;
-BST<BookCopy> copys;
+BST<Book*> books;
+BST<BookCopy*> copys;
+/**
+ * @brief function to read file into bst
+ * To support polymorphism, a pointer to the object is used instead of object. 
+ * 
+ */
 void scanFile(){
     int type;
 	ifstream fin("student.txt");
@@ -23,6 +28,7 @@ void scanFile(){
             Student* student = new Student();
 		    fin >> *(student);
             User* user = student;
+            user->setKey();
             users.insert(user);
 		}
 		else if( type == 1) {
@@ -31,6 +37,7 @@ void scanFile(){
 
 			fin >> *(teacher);
             User* user = teacher;
+            user->setKey();
             users.insert(user);
         }
         else {
@@ -38,11 +45,61 @@ void scanFile(){
             Librarian* lib = new Librarian();
             fin>>*(lib);
             User* user = lib;
+            user->setKey();
             users.insert(user);
 
         }
 	} while (!fin.eof());
+    ifstream fin2("book.txt");
+	if (fin2.fail()) {
+		cerr << "Error opening book file.";
+		exit(1);
+	}
+
+	while(true){
+        Book* book = new Book();
+        fin2>>*(book);
+        if(fin2.eof()){
+            break;
+        }
+        book->setKey();
+        
+        books.insert(book);
+	} 
+    
+    ifstream fin3("copy.txt");
+    if (fin3.fail()) {
+		cerr << "Error opening book file.";
+		exit(1);
+	}
+
+	while (true)
+    {
+        /* code */
+        BookCopy* copy = new BookCopy();
+        fin3>>*(copy);
+
+        if(fin3.eof()){break;}
+        string isbn = copy->getISBN();
+        Book** bpptr = books.search(isbn);
+        Book    b  = **(bpptr);
+        copy->setBook(b);
+        copy->setKey();
+
+        copys.insert(copy);
+    }
+    
+        
+
+
 };
+void outputFile(){
+    
+
+
+
+
+}
 
 
 int main(){
@@ -87,8 +144,8 @@ int main(){
     cout<<(isbn<isbn2);
     //--------------------testing for file input ------------------
     users = BST<User*>();
-    books = BST<Book>();
-    copys = BST<BookCopy>();
+    books = BST<Book*>();
+    copys = BST<BookCopy*>();
     scanFile();
     User** u = users.search("James");
     Teacher* t =dynamic_cast<Teacher*>(*(u));
