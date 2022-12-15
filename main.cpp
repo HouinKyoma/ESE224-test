@@ -21,8 +21,9 @@ void scanFile(){
 		exit(1);
 	}
 
-	do {
+	while(true) {
 		fin >> type;
+        if(fin.eof()){break;}
 		if (type == 0) {
 
             Student* student = new Student();
@@ -49,7 +50,10 @@ void scanFile(){
             users.insert(user);
 
         }
-	} while (!fin.eof());
+	} 
+
+
+
     ifstream fin2("book.txt");
 	if (fin2.fail()) {
 		cerr << "Error opening book file.";
@@ -69,7 +73,7 @@ void scanFile(){
     
     ifstream fin3("copy.txt");
     if (fin3.fail()) {
-		cerr << "Error opening book file.";
+		cerr << "Error opening copy file.";
 		exit(1);
 	}
 
@@ -94,6 +98,7 @@ void scanFile(){
 
 };
 void outputFile(){
+
     
 
 
@@ -124,7 +129,7 @@ int main(){
 
     //when ending, update the txt files 
     //testing code 
-    BST<int> bst = BST<int>();
+    /*BST<int> bst = BST<int>();
     bst.insert(1);
     bst.insert(3);
     bst.insert(10);
@@ -141,13 +146,19 @@ int main(){
     long int isbn2 = stol(s2);
     cout<<isbn;
     cout<<isbn2<<endl;
-    cout<<(isbn<isbn2);
+    cout<<(isbn<isbn2);*/
     //--------------------testing for file input ------------------
     users = BST<User*>();
     books = BST<Book*>();
     copys = BST<BookCopy*>();
     scanFile();
-    User** u = users.search("James");
-    Teacher* t =dynamic_cast<Teacher*>(*(u));
-    t->setMax_Period(1);
+    User** u1 = users.search("James");
+    User** u2 = users.search("HaHa");
+    cout<<endl;
+    cout<<(**(u1)<**(u2));
+    //User** u = users.search("Bob");
+    //Librarian* t =dynamic_cast<Librarian*>(*(u));
+    //t->setMax_Period(1);
+    cout<<endl;
+    //bst.printLevelOrder();
 }

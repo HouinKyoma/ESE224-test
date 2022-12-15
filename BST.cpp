@@ -1,4 +1,21 @@
 #include"BST.h"
+#include"Book.h"
+#include"User.h"
+#include<iostream>
+#include<algorithm>
+template<typename Comparable>
+bool lessThan(const Comparable& x, const Comparable&y){
+     
+     std::string s1 = x->getKey();
+    std::string s2 = y->getKey();
+    return std::lexicographical_compare(s1.begin(),s1.end(),s2.begin(),s2.end());
+
+
+
+}
+
+
+
 
 
 template<typename Comparable>
@@ -24,12 +41,21 @@ void BST<Comparable>::insert(const Comparable& x, BSTNode<Comparable>*& t) const
         t = new BSTNode<Comparable>(x);
 
     }
-    else if(x < t->data){
+   
+     else if(lessThan(x,t->data)){
+          //cout<<"x less than data"<<endl;
+          insert(x,t->left);
+     }
+     else if(lessThan(t->data,x)){
+          insert(x,t->right);
+     }
+    
+    /*else if(x < t->data){
         insert(x, t->left);
     }
     else if(t->data < x){
         insert(x, t->right);
-    }
+    }*/
     else
         //duplicate do nothing
         ;
@@ -48,10 +74,13 @@ void BST<Comparable>::remove(const Comparable &x, BSTNode<Comparable> *&t) const
    if(t == nullptr){
         return;
    } 
-   if(x<t->data){
+   if(typeid(x)==typeid(User)||typeid(x)==typeid(Book)||typeid(x)==typeid(BookCopy)){
+     std::cout<<"is defined type"<<std::endl;
+   }
+   if(lessThan(x,t->data)){
         remove(x, t->left);
    }
-   else if(x > t->data){
+   else if(lessThan(t->data,x)){
         remove(x, t->right);
    }
    else if(t->left!=nullptr && t->right!=nullptr){
@@ -93,15 +122,25 @@ const Comparable& BST<Comparable>:: findMin() const{
  */
 template <typename Comparable>
 bool BST<Comparable>::contains(const Comparable&x, BSTNode<Comparable> *t)const{
+     
      if(t == nullptr){
           return false;
      }
+      else if(lessThan(x,t->data)){
+          //cout<<"x less than data"<<endl;
+          return contains(x,t->left);
+     }
+     else if(lessThan(t->data,x)){
+          return contains(x,t->right);
+     }
+     /*
      else if(t->data<x){
           return contains(x,t->left);
      }
      else if(x<t->data){
           return contains(x,t->right);
      }
+     */
      else 
           return true;
 
@@ -123,10 +162,10 @@ Comparable* BST<Comparable>::search(const Comparable&x, BSTNode<Comparable> *t)c
      if(t == nullptr){
           return nullptr;
      }
-     else if(t->data<x){
+     else if(lessThan(x,t->data)){
           return search(x,t->left);
      }
-     else if(x<t->data){
+     else if(lessThan(t->data,x)){
           return search(x,t->right);
      }
      else {
@@ -149,13 +188,20 @@ Comparable* BST<Comparable>::search(const std::string& key)const{
 
 template <typename Comparable>
 Comparable* BST<Comparable>::search(const std::string& key, BSTNode<Comparable> *t)const{
+     std::string s1,s2;
+     bool S1lessthanS2, S2lessthanS1;
+     if(t!=nullptr) {
+          s2 = t->data->getKey();
+          s1 = key;
+          S1lessthanS2 = std::lexicographical_compare(s1.begin(),s1.end(),s2.begin(),s2.end());
+          S2lessthanS1 = std::lexicographical_compare(s2.begin(),s2.end(),s1.begin(),s1.end());}
      if(t == nullptr){
           return nullptr;
      }
-     else if(t->data->getKey()<key){
+     else if(S1lessthanS2){
           return search(key,t->left);
      }
-     else if(key<t->data->getKey()){
+     else if(S2lessthanS1){
           return search(key,t->right);
      }
      else {
@@ -166,4 +212,50 @@ Comparable* BST<Comparable>::search(const std::string& key, BSTNode<Comparable> 
 
 
 
+}
+
+
+
+template <typename Comparable>
+void BST<Comparable>:: printCurrentLevel(BSTNode<Comparable>*t, int level){
+   if(t==nullptr){
+     return;
+   } 
+   if(level == 1){
+     std::cout<<t->data<<" ";
+   }
+   else if(level > 1){
+     printCurrentLevel(t->left, level-1);
+     printCurrentLevel(t->right, level-1);
+   }
+}
+
+
+
+template <typename Comparable>
+int BST<Comparable>:: height(const BSTNode<Comparable>* t)const{
+     if(t == nullptr){
+          return 0;
+     }
+     else{
+          int lheight = height(t->left);
+        int rheight = height(t->right);
+ 
+        /* use the larger one */
+        if (lheight > rheight) {
+            return (lheight + 1);
+        }
+        else {
+            return (rheight + 1);
+        }
+     }
+}
+
+template <typename Comparable>
+void BST<Comparable>:: printLevelOrder(){
+     int h = height(root);
+    int i;
+    for (i = 1; i <= h; i++){
+        printCurrentLevel(root, i);
+     }
 }

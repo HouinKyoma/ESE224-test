@@ -1,12 +1,26 @@
 #pragma once
 #include<vector>
 #include<string>
+#include<typeinfo>
+template <typename Comparable>
+class Data{
+    private:
+    Comparable data;
+    std::string key;
+    public:
+    std::string getKey(){return key;};
+    void setKey(std::string key_){key = key_;};
+
+
+
+};
 template <typename Comparable>
 class BSTNode
 {   public:
     BSTNode *left;
     BSTNode *right;
     Comparable data;
+    //Data<Comparable> data;
     BSTNode()
     {
         left = nullptr;
@@ -17,6 +31,7 @@ class BSTNode
         left = nullptr;
         right = nullptr;
     }
+
     
 };
 template <typename Comparable>
@@ -36,7 +51,10 @@ public:
     bool contains(const Comparable &x) const;
     Comparable* search(const Comparable &x) const;
     Comparable* search(const std::string &key) const;
-    Comparable* searchBook(std::vector<std::string>& searchArgs);
+    Comparable* searchBook(std::vector<std::string>& searchArgs);\
+    int height(const BSTNode<Comparable>* t)const;
+    void printLevelOrder();
+    
 
 private:
     void insert(const Comparable &x, BSTNode<Comparable>*&t) const;
@@ -46,5 +64,6 @@ private:
     bool contains(const Comparable&x, BSTNode<Comparable> *t)const;
     Comparable* search(const Comparable&x, BSTNode<Comparable> *t)const;
     Comparable* search(const std::string& key, BSTNode<Comparable> *t)const;
+    void printCurrentLevel(BSTNode<Comparable>*t, int level);
 };
 
