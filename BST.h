@@ -53,7 +53,7 @@ public:
     Comparable* search(const std::string &key) const;
     Comparable* searchBook(std::vector<std::string>& searchArgs);\
     int height(const BSTNode<Comparable>* t)const;
-    void printLevelOrder();
+    void printLevelOrder(std::ofstream& os);
     
 
 private:
@@ -64,6 +64,6 @@ private:
     bool contains(const Comparable&x, BSTNode<Comparable> *t)const;
     Comparable* search(const Comparable&x, BSTNode<Comparable> *t)const;
     Comparable* search(const std::string& key, BSTNode<Comparable> *t)const;
-    void printCurrentLevel(BSTNode<Comparable>*t, int level);
+    void printCurrentLevel(BSTNode<Comparable>*t, int level,std::ofstream& os);
 };
 

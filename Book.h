@@ -32,15 +32,6 @@ class Book{
         void setKey() {main_key = ISBN;}
         //--------------------operators---------------------------
         bool operator<(const Book& book2)const;
-
-        //-------------------class methods----------------------
-        void favorCount(){favor++;};
-        
-        Book(){
-            favor = 0;
-        };
-        ~Book(){};
-
         friend std::ostream &operator<<(std::ostream &os, const Book &rhs) {
             os << "ISBN: " << rhs.ISBN
                << " title: " << rhs.title
@@ -61,6 +52,15 @@ class Book{
 
             return is;
         }
+        //-------------------class methods----------------------
+        void favorCount(){favor++;};
+        std::string toString(); 
+        Book(){
+            favor = 0;
+        };
+        ~Book(){};
+
+       
         
 };
 class BookCopy{
@@ -130,6 +130,11 @@ class BookCopy{
 
         string getKey()const {return main_key;}
         void setKey(){main_key = to_string(ID);}
+
+
+
+        //---------------------class methods--------------------
+        std::string toString();
     
 
 };

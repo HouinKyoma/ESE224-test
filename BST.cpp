@@ -14,7 +14,10 @@ bool lessThan(const Comparable& x, const Comparable&y){
 
 }
 
-
+template<typename Comparable>
+std::string toString(const Comparable&x){
+     return x->toString();
+}
 
 
 
@@ -217,16 +220,16 @@ Comparable* BST<Comparable>::search(const std::string& key, BSTNode<Comparable> 
 
 
 template <typename Comparable>
-void BST<Comparable>:: printCurrentLevel(BSTNode<Comparable>*t, int level){
+void BST<Comparable>:: printCurrentLevel(BSTNode<Comparable>*t, int level,std::ofstream& os){
    if(t==nullptr){
      return;
    } 
    if(level == 1){
-     std::cout<<t->data<<" ";
+     os<<toString(t->data)<<std::endl;
    }
    else if(level > 1){
-     printCurrentLevel(t->left, level-1);
-     printCurrentLevel(t->right, level-1);
+     printCurrentLevel(t->left, level-1,os);
+     printCurrentLevel(t->right, level-1,os);
    }
 }
 
@@ -252,10 +255,11 @@ int BST<Comparable>:: height(const BSTNode<Comparable>* t)const{
 }
 
 template <typename Comparable>
-void BST<Comparable>:: printLevelOrder(){
+void BST<Comparable>:: printLevelOrder(std::ofstream& os){
      int h = height(root);
     int i;
     for (i = 1; i <= h; i++){
-        printCurrentLevel(root, i);
+        printCurrentLevel(root, i,os);
      }
 }
+

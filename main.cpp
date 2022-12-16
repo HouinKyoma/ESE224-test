@@ -23,7 +23,6 @@ void scanFile(){
 
 	while(true) {
 		fin >> type;
-        if(fin.eof()){break;}
 		if (type == 0) {
 
             Student* student = new Student();
@@ -39,6 +38,7 @@ void scanFile(){
 			fin >> *(teacher);
             User* user = teacher;
             user->setKey();
+            user->setType(2);
             users.insert(user);
         }
         else {
@@ -50,6 +50,8 @@ void scanFile(){
             users.insert(user);
 
         }
+
+        if(fin.eof()){break;}
 	} 
 
 
@@ -63,12 +65,9 @@ void scanFile(){
 	while(true){
         Book* book = new Book();
         fin2>>*(book);
-        if(fin2.eof()){
-            break;
-        }
         book->setKey();
-        
         books.insert(book);
+        if(fin2.eof()){ break;}
 	} 
     
     ifstream fin3("copy.txt");
@@ -83,7 +82,6 @@ void scanFile(){
         BookCopy* copy = new BookCopy();
         fin3>>*(copy);
 
-        if(fin3.eof()){break;}
         string isbn = copy->getISBN();
         Book** bpptr = books.search(isbn);
         Book    b  = **(bpptr);
@@ -91,6 +89,7 @@ void scanFile(){
         copy->setKey();
 
         copys.insert(copy);
+        if(fin3.eof()){break;}
     }
     
         
@@ -99,7 +98,33 @@ void scanFile(){
 };
 void outputFile(){
 
-    
+    ofstream myfile;
+    myfile.open("student2.txt");
+    if (myfile.is_open())
+  {
+    users.printLevelOrder(myfile);
+  }
+  else cout << "Unable to open file";
+
+    myfile.close();
+  ofstream myfile2;
+    myfile2.open("book2.txt");
+    if (myfile2.is_open())
+  {
+    books.printLevelOrder(myfile2);
+  }
+  else cout << "Unable to open file";
+
+    myfile2.close();
+ofstream myfile3;
+    myfile3.open("copy2.txt");
+    if (myfile3.is_open())
+  {
+    copys.printLevelOrder(myfile3);
+  }
+  else cout << "Unable to open file";
+
+    myfile3.close();
 
 
 
@@ -161,4 +186,6 @@ int main(){
     //t->setMax_Period(1);
     cout<<endl;
     //bst.printLevelOrder();
+    BookCopy** c = copys.search("18");
+    outputFile();
 }

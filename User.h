@@ -20,10 +20,10 @@ class User{
     string getPassword() const { return password; }
     void setPassword(const string &password_) { password = password_; }
     string getUsername() const { return username; }
-    void setUsername(const string &username_) { username = username_;main_key = username; }
+    void setUsername(const string &username_) { username = username_;main_key = username;}
+    void setType(int i){type = i;}
 
-
-
+    
     //------------------operators---------------------------------------------------
     friend std::istream& operator>>(std::istream& is, User& rhs){
         string name, password;
@@ -35,7 +35,7 @@ class User{
     }   
     friend std::ostream& operator<<(std::ostream& os, User& rhs){
         os<<rhs.getType()<<" "<<rhs.getUsername()<<" "<<rhs.getPassword()<<endl;
-        
+        return os;
     }
     bool operator<(const User& user2)const;
 
@@ -44,6 +44,10 @@ class User{
     User(){};
     virtual ~User(){};
     virtual int getType(){};
+
+
+    //------------------------other methods---------------------------
+    std::string toString();
 
 };
 class Reader:public virtual User{
