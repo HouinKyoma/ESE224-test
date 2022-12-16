@@ -67,8 +67,8 @@ class Reader:public virtual User{
     void borrowBook(int id, BST<BookCopy*>& lib);
     void returnBook(int id,BST<BookCopy*>& lib);
     void renewBook(int id,BST<BookCopy*>& lib);
-    void reserveBook(std::string isbn,BST<BookCopy*>& lib);
-    void cancelReserve(std::string isbn,BST<BookCopy*>& lib);
+    void reserveBook(std::string isbn,BST<Book*>& lib);
+    void cancelReserve(std::string isbn,BST<Book*>& lib);
     bool canBorrow()const;
 
     
@@ -111,10 +111,10 @@ class Librarian:public virtual User{
     public:
     Librarian(){};
     ~Librarian(){};
-    void addUser();
-    void addBook();
-    void deleteUser(); 
-    void deleteBook();
+    void addUser(BST<User*>& list);
+    void addBook(BST<Book*>& lib,BST<BookCopy*>& copys);
+    void deleteUser(std::string name, BST<User*>& list); 
+    void deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys);
     void searchUser();
     int getType(){return 2;};
     friend std::istream& operator>>(std::istream& is, Librarian& rhs){
