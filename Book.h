@@ -74,7 +74,7 @@ class Book{
             copyList = vector<BookCopy>();
         };
         ~Book(){};
-
+        int sizeCopyList(){return copyList.size();}
         void removeCopy(int id);
         void addCopy(BookCopy& c);
     

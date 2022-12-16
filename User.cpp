@@ -1,5 +1,6 @@
 #include"User.h"
 #include"BST.h"
+#include"BST.cpp"
 #include<algorithm>
 #include<ctime>
 bool User::operator<(const User& user2)const{
@@ -155,6 +156,7 @@ void Reader::reserveBook(std::string isbn,BST<Book*>& lib){
     Book** bpptr = lib.search(isbn);
     Book reserved = **(bpptr);
     reserved.addReaderList(*this);
+    this->reservedList.push_back(reserved);
 
 }
 void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
@@ -162,6 +164,24 @@ void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
     Book reserved = **(bpptr);
     reserved.removeReaderList(*this);
 }
+/**
+ * @brief this function must be used when delete a reader, iterate through the reserved list of reader, and remove the Book object from the vector, and linkedlist of Book class readerlist
+ * 
+ */
+void Reader::clearReserve(){
+    //
+    std::vector<Book>::iterator it = reservedList.begin();
+    for(auto i:reservedList){
+        i.removeReaderList(*this);//remove the reader from the Book's reserver list
+        this->reservedList.erase(it);
+        it++;//
+    }
+}
+int Reader::numBorrowed(){
+    return borrowedList.size();
+}
+
+
 
 void Librarian::addUser(BST<User*>& list){
     //Prompt user
@@ -219,13 +239,77 @@ void Librarian:: addBook(BST<Book*>& lib,BST<BookCopy*>& copys){
 		cin >> isbn;
         //search for book
         Book** bpptr = lib.search(isbn);
-        BookCopy* newCopy = new BookCopy(isbn);
         //case when the book already exist;
+
+        BookCopy* newCopy = new BookCopy(isbn);
         if(bpptr != nullptr){
             
+            Book addedBook = **(bpptr);
+            addedBook.addCopy(*newCopy);//add the book to the copy list;
+            newCopy->setBook(addedBook);
+            copys.insert(newCopy);
+            std::cout<<"A new copy has been added to book "<<addedBook.getTitle()<<endl;
+        }
+        else{
+            Book* newBook = new Book();
+            newBook->setAuthor(author);
+            newBook->setISBN(isbn);
+            newBook->setCategory(category);
+            newBook->setTitle(title);
+            lib.insert(newBook);
+            newCopy->setBook(*newBook);
+            newBook->addCopy(*newCopy);
+            copys.insert(newCopy);
+            std::cout<<" The book with name "<<newBook->getTitle()<<" and a new copy is added to the library."<<endl;
+
         }
         //case when the book doesn't exist, first add a new Book to BST, then add a copy to copy BST, also do all the required member update 
 }
-void Librarian:: deleteUser(std::string name, BST<User*>& list){}
-void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){}
-void Librarian:: searchUser(){}
+void Librarian:: deleteUser(std::string name, BST<User*>& list){
+    //check if the student have any copy left
+    User** uptr = list.search(name);
+    if(uptr==nullptr){std::cerr<<"the user with the name does not exist."<<std::endl;return;}
+    Librarian* l =dynamic_cast<Librarian*>(*(uptr));
+    Reader* t =dynamic_cast<Reader*>(*(uptr));
+    if(l!=nullptr){
+        //since not reader just remove
+        list.remove(l);
+        std::cout<<"The librarian "<<l->getUsername()<<" has been successfully delted."<<std::endl;
+        return;
+    }
+    else if(t!=nullptr){
+        if(t->numBorrowed()>0){
+            std::cerr<<"The reader still have unreturned book, please delete after all books are returned"<<endl;
+            return;
+        }
+        else{
+            t->clearReserve();
+            list.remove(t);
+            std::cout<<"The reader "<<t->getUsername()<<" has been successfully deleted."<<std::endl;
+            return;
+        }
+    }
+
+
+    //remove all the reserved books
+}
+void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){
+    BookCopy** cptr = copys.search(to_string(id));
+    if(cptr == nullptr){std::cerr<<"the copy with the id does not exist!"<<std::endl;}
+    BookCopy deleteCopy = **(cptr);
+    deleteCopy.getBook().removeCopy(id); // remove the copy from its Book
+    std::cout<<"BookCopy "<<deleteCopy.getID()<<" has been deleted from Copy list."<<std::endl;
+    if(deleteCopy.getBook().sizeCopyList()==0){//if there is no copy left from that book
+        //what should the behavior of the user who reserved the book be? this is sth unspecified in doc
+        Book** deleteBook = lib.search(deleteCopy.getISBN());
+        lib.remove(*(deleteBook));
+        std::cout<<"Book "<< (**deleteBook).getTitle()<<" has been deleted from Book list because there is 0 copies left."<<std::endl;
+    }
+    copys.remove(*cptr);
+}
+void Librarian:: searchUser(){
+    std::string username;
+    std::cout<<"input username to search:"<<std::endl;
+    std::cin>>username;
+    //TODO copy the code from delete user, since shares the same structure
+}

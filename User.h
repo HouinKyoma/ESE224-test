@@ -70,6 +70,8 @@ class Reader:public virtual User{
     void reserveBook(std::string isbn,BST<Book*>& lib);
     void cancelReserve(std::string isbn,BST<Book*>& lib);
     bool canBorrow()const;
+    void clearReserve();
+    int numBorrowed();
 
     
 };
