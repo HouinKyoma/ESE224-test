@@ -151,6 +151,14 @@ void Reader::renewBook(int id,BST<BookCopy*>& lib){
     borrowed.setExpDate(borrowed.getExpDate()+this->MAX_BORROW_PERIOD);
 }
 
-void Reader::reserveBook(std::string isbn,BST<BookCopy*>& lib){
-    
+void Reader::reserveBook(std::string isbn,BST<Book*>& lib){
+    Book** bpptr = lib.search(isbn);
+    Book reserved = **(bpptr);
+    reserved.addReaderList(*this);
+
+}
+void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
+    Book** bpptr = lib.search(isbn);
+    Book reserved = **(bpptr);
+    reserved.removeReaderList(*this);
 }

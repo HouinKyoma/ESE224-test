@@ -15,7 +15,7 @@ class Book{
         string category;
         string main_key = ISBN;
         int favor;//we assume favorite count will not be saved and read from txt files
-        list<Reader> readers;
+        list<Reader> readers;//list of reservers
         vector<BookCopy> copyList;
     public:
         //----------------setter/getters--------------------
