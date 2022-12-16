@@ -5,6 +5,8 @@
 #include<list>
 class User;
 using namespace std;
+class Reader;
+class BookCopy;
 class Book{
     private:
         string ISBN;
@@ -13,7 +15,8 @@ class Book{
         string category;
         string main_key = ISBN;
         int favor;//we assume favorite count will not be saved and read from txt files
-        list<User> readers;
+        list<Reader> readers;
+        vector<BookCopy> copyList;
     public:
         //----------------setter/getters--------------------
         string getISBN() const { return ISBN; }
@@ -30,6 +33,7 @@ class Book{
 
         string getKey() const{return main_key;}
         void setKey() {main_key = ISBN;}
+
         //--------------------operators---------------------------
         bool operator<(const Book& book2)const;
         friend std::ostream &operator<<(std::ostream &os, const Book &rhs) {
@@ -54,13 +58,27 @@ class Book{
         }
         //-------------------class methods----------------------
         void favorCount(){favor++;};
+        void addReaderList(Reader& r){
+            readers.push_back(r);
+        }
+        void removeReaderList(Reader& r);
+        Reader popReaderList(); 
+        int sizeReaderList(){
+            return readers.size();
+        }
+
         std::string toString(); 
         Book(){
             favor = 0;
+
+            copyList = vector<BookCopy>();
         };
         ~Book(){};
 
-       
+        void removeCopy(int id);
+        void addCopy(BookCopy& c);
+    
+
         
 };
 class BookCopy{
@@ -75,9 +93,12 @@ class BookCopy{
         int startDate;
         int expDate;
     public:
+        static int IDassign;
+        static time_t startTime;
     //-----------------------constructors---------------
         BookCopy(){
-
+            readerName = "";
+            reserverName = "";
         };
         ~BookCopy(){};
     //---------------------operators--------------------
@@ -135,8 +156,7 @@ class BookCopy{
 
         //---------------------class methods--------------------
         std::string toString();
-    
-
+       
 };
 /*
 

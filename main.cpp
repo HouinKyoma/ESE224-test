@@ -1,13 +1,27 @@
 #include<iostream>
 #include<fstream>
+#include<ctime>
 #include"BST.h"
 #include"BST.cpp"
 #include"Book.h"
 #include"User.h"
+
 using namespace std;
 BST<User*> users;
 BST<Book*> books;
 BST<BookCopy*> copys;
+time_t startDate;
+time_t BookCopy::startTime;
+int BookCopy::IDassign = 1;
+
+int dateCounter() {
+	time_t currentTime;
+	time(&currentTime);
+	return difftime(currentTime, startDate) / 5;//return the number of time passed in day;
+}
+
+
+
 /**
  * @brief function to read file into bst
  * To support polymorphism, a pointer to the object is used instead of object. 
@@ -29,6 +43,7 @@ void scanFile(){
 		    fin >> *(student);
             User* user = student;
             user->setKey();
+            user->setType(0);
             users.insert(user);
 		}
 		else if( type == 1) {
@@ -38,7 +53,7 @@ void scanFile(){
 			fin >> *(teacher);
             User* user = teacher;
             user->setKey();
-            user->setType(2);
+            user->setType(1);
             users.insert(user);
         }
         else {
@@ -47,6 +62,7 @@ void scanFile(){
             fin>>*(lib);
             User* user = lib;
             user->setKey();
+            user->setType(2);
             users.insert(user);
 
         }
@@ -86,6 +102,7 @@ void scanFile(){
         Book** bpptr = books.search(isbn);
         Book    b  = **(bpptr);
         copy->setBook(b);
+        b.addCopy(*copy);
         copy->setKey();
 
         copys.insert(copy);
@@ -133,6 +150,10 @@ ofstream myfile3;
 
 
 int main(){
+    //configurations:
+        //setup time
+    time(&startDate);
+    time(&BookCopy::startTime);
     //Load from file
         //load into a BST
     
@@ -187,5 +208,11 @@ int main(){
     cout<<endl;
     //bst.printLevelOrder();
     BookCopy** c = copys.search("18");
+    User* u = *(u1);
+    users.remove(u);
+    vector<BookCopy*>vec = copys.vectorize();
+    for(auto i:vec){
+        cout<<*i<<endl;
+    }
     outputFile();
 }

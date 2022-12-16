@@ -263,3 +263,28 @@ void BST<Comparable>:: printLevelOrder(std::ofstream& os){
      }
 }
 
+template <typename Comparable>
+vector<Comparable> BST<Comparable>::vectorize()const{
+     std::vector<Comparable> res = std::vector<Comparable>();
+     int h = height(root);
+     int i;
+     for (i = 1; i <= h; i++){
+         vectorizeCurrentLevel(root, i,res);
+     }
+     return res;
+}
+
+
+template <typename Comparable>
+void BST<Comparable>::vectorizeCurrentLevel(BSTNode<Comparable>*t, int level, std::vector<Comparable>& vec)const{
+      if(t==nullptr){
+     return;
+   } 
+   if(level == 1&&t->data->getKey()!=""){
+     vec.push_back(t->data);
+   }
+   else if(level > 1){
+     vectorizeCurrentLevel(t->left, level-1,vec);
+     vectorizeCurrentLevel(t->right, level-1,vec);
+   }
+}

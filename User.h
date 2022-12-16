@@ -4,9 +4,11 @@
 #include<iostream>
 #include<list>
 #include"Book.h"
+#include"BST.h"
 
 using namespace std;
 class BookCopy;
+class Book;
 class User{
     private:
     int type;
@@ -23,7 +25,7 @@ class User{
     void setUsername(const string &username_) { username = username_;main_key = username;}
     void setType(int i){type = i;}
 
-    
+
     //------------------operators---------------------------------------------------
     friend std::istream& operator>>(std::istream& is, User& rhs){
         string name, password;
@@ -43,7 +45,7 @@ class User{
     //--------------------Constructors and virtual functions--------------------------
     User(){};
     virtual ~User(){};
-    virtual int getType(){};
+    virtual int getType(){return NULL;};
 
 
     //------------------------other methods---------------------------
@@ -52,13 +54,22 @@ class User{
 };
 class Reader:public virtual User{
     private:
+    vector<BookCopy> borrowedList;
+    vector<Book> reservedList;
+    int penalty;
+    protected:
     int MAX_COPIES;
     int MAX_BORROW_PERIOD;
-    vector<BookCopy> borrowedList;
-    int penalty;
+    
     public:
-    virtual void setMax_Copies(int n){};
-    virtual void setMax_Period(int n){};
+    virtual void setMax_Copies(){};
+    virtual void setMax_Period(){};
+    void borrowBook(int id, BST<BookCopy*>& lib);
+    void returnBook(int id,BST<BookCopy*>& lib);
+    void renewBook(int id,BST<BookCopy*>& lib);
+    void reserveBook(std::string isbn,BST<BookCopy*>& lib);
+    void cancelReserve(std::string isbn,BST<BookCopy*>& lib);
+    bool canBorrow()const;
 
     
 };
@@ -66,8 +77,8 @@ class Student:public virtual Reader{
     public:
     Student(){};
     ~Student(){};
-    void setMax_Copies(int n){};
-    void setMax_Period(int n){};
+    void setMax_Copies(){MAX_COPIES = 5;};
+    void setMax_Period(){MAX_BORROW_PERIOD = 10; };
     friend std::istream& operator>>(std::istream& is, Student& rhs){
         string name, password;
         is>>name>>password;
@@ -82,8 +93,8 @@ class Teacher:public virtual Reader{
     public:
     Teacher(){};
     ~Teacher(){};
-    void setMax_Copies(int n){};
-    void setMax_Period(int n){std::cout<<"teacher"<<endl;};
+    void setMax_Copies(){MAX_COPIES = 10;};
+    void setMax_Period(){MAX_BORROW_PERIOD = 20;};
     int getType(){return 1;}
     void testFunction(){std:;cout<<"This is a teacher"<<endl;}
     friend std::istream& operator>>(std::istream& is, Teacher& rhs){
