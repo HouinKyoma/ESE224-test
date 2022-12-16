@@ -100,6 +100,13 @@ class BookCopy{
             readerName = "";
             reserverName = "";
         };
+        BookCopy(string isbn_){
+            ID = IDassign++;
+            readerName = "";
+            reserverName = "";
+            isbn = isbn_;
+            
+        }
         ~BookCopy(){};
     //---------------------operators--------------------
         bool operator<(const BookCopy& book2)const;
@@ -118,6 +125,7 @@ class BookCopy{
             int id;
             is >> ISBN >> id;
             rhs.setID(id);
+            IDassign++;
             rhs.setISBN(ISBN);//we are only getting ISBN here? additional work will have to be done to set the Book member with according isbn
             return is;
         }

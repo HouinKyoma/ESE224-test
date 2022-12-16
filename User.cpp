@@ -162,3 +162,70 @@ void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
     Book reserved = **(bpptr);
     reserved.removeReaderList(*this);
 }
+
+void Librarian::addUser(BST<User*>& list){
+    //Prompt user
+    string username;
+    string password;
+    int type;
+    cout<<"Enter account type(0 = student, 1 = teacher, 2=librarian";
+    cin>>type;
+    cout<<endl;
+    cout<<"Enter Username:";
+    cin>>username;
+    cout<<endl;
+    cout<<"Enter Password:";
+    cin>>password;
+    switch (type)
+    {
+    case 0 :
+        {Student* s = new Student();
+        s->setUsername(username);
+        s->setPassword(password);
+        list.insert(s);
+        break;}
+    case 1:
+        {Teacher* t = new Teacher();
+        t->setUsername(username);
+        t->setPassword(password);
+        list.insert(t);
+        break;}
+    case 2:
+        {Librarian* l = new Librarian();
+        l->setUsername(username);
+        l->setPassword(password);
+        list.insert(l);
+        break;
+        }
+    default:
+        break;
+    }
+    
+
+}
+
+void Librarian:: addBook(BST<Book*>& lib,BST<BookCopy*>& copys){
+        
+        std::string title,author,category,isbn;
+        cout <<"Adding book--Please enter prompted information"<<endl;
+
+        cout << "Enter title: ";
+		cin >> title;
+        cout << "Enter author: ";
+		cin >> author; 
+		cout << "Enter category: ";
+		cin >> category; 
+		cout << "Enter ISBN: ";
+		cin >> isbn;
+        //search for book
+        Book** bpptr = lib.search(isbn);
+        BookCopy* newCopy = new BookCopy(isbn);
+        //case when the book already exist;
+        if(bpptr != nullptr){
+            
+        }
+        //case when the book doesn't exist, first add a new Book to BST, then add a copy to copy BST, also do all the required member update 
+}
+void Librarian:: deleteUser(std::string name, BST<User*>& list){}
+void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){}
+void Librarian:: searchUser(){}
