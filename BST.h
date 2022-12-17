@@ -10,10 +10,8 @@ class Data{
     public:
     std::string getKey(){return key;};
     void setKey(std::string key_){key = key_;};
-
-
-
 };
+
 template <typename Comparable>
 class BSTNode
 {   public:
@@ -31,9 +29,8 @@ class BSTNode
         left = nullptr;
         right = nullptr;
     }
-
-    
 };
+
 template <typename Comparable>
 class BST
 {
@@ -56,7 +53,6 @@ public:
     void printLevelOrder(std::ofstream& os);
     std::vector<Comparable> vectorize()const;
     
-
 private:
     void insert(const Comparable &x, BSTNode<Comparable>*&t) const;
     void remove(const Comparable &x, BSTNode<Comparable>*&t) const;
@@ -68,4 +64,3 @@ private:
     void printCurrentLevel(BSTNode<Comparable>*t, int level,std::ofstream& os);
     void vectorizeCurrentLevel(BSTNode<Comparable>*t, int level, std::vector<Comparable>& vec)const;
 };
-

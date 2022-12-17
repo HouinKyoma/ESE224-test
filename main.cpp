@@ -20,8 +20,6 @@ int dateCounter() {
 	return difftime(currentTime, startDate) / 5;//return the number of time passed in day;
 }
 
-
-
 /**
  * @brief function to read file into bst
  * To support polymorphism, a pointer to the object is used instead of object. 
@@ -29,71 +27,60 @@ int dateCounter() {
  */
 void scanFile(){
     int type;
-	ifstream fin("student.txt");
-	if (fin.fail()) {
-		cerr << "Error opening student file.";
-		exit(1);
-	}
+    ifstream fin("student.txt");
+    if (fin.fail()) {
+      cerr << "Error opening student file.";
+      exit(1);
+    }
 
-	while(true) {
-		fin >> type;
-		if (type == 0) {
-
+    while (true) {
+        fin >> type;
+        if (type == 0) {
             Student* student = new Student();
-		    fin >> *(student);
+            fin >> *(student);
             User* user = student;
             user->setKey();
             user->setType(0);
             users.insert(user);
-		}
-		else if( type == 1) {
-
+        } else if ( type == 1) {
             Teacher* teacher= new Teacher();
-
-			fin >> *(teacher);
+            fin >> *(teacher);
             User* user = teacher;
             user->setKey();
             user->setType(1);
             users.insert(user);
-        }
-        else {
-
+        } else {
             Librarian* lib = new Librarian();
             fin>>*(lib);
             User* user = lib;
             user->setKey();
             user->setType(2);
             users.insert(user);
-
         }
-
         if(fin.eof()){break;}
-	} 
-
-
+    } 
 
     ifstream fin2("book.txt");
-	if (fin2.fail()) {
-		cerr << "Error opening book file.";
-		exit(1);
-	}
+    if (fin2.fail()) {
+      cerr << "Error opening book file.";
+      exit(1);
+    }
 
-	while(true){
+    while (true){
         Book* book = new Book();
         fin2>>*(book);
         book->setKey();
         books.insert(book);
         if(fin2.eof()){ break;}
-	} 
+    } 
     
     ifstream fin3("copy.txt");
     if (fin3.fail()) {
 		cerr << "Error opening copy file.";
 		exit(1);
-	}
+	  }
 
-	while (true)
-    {
+	  while (true){
         /* code */
         BookCopy* copy = new BookCopy();
         fin3>>*(copy);
@@ -107,47 +94,35 @@ void scanFile(){
 
         copys.insert(copy);
         if(fin3.eof()){break;}
-    }
-    
-        
-
-
+    }  
 };
-void outputFile(){
 
+void outputFile(){
     ofstream myfile;
     myfile.open("student2.txt");
-    if (myfile.is_open())
-  {
-    users.printLevelOrder(myfile);
-  }
-  else cout << "Unable to open file";
+
+    if (myfile.is_open()){
+        users.printLevelOrder(myfile);
+    } else cout << "Unable to open file";
 
     myfile.close();
-  ofstream myfile2;
+    ofstream myfile2;
     myfile2.open("book2.txt");
-    if (myfile2.is_open())
-  {
-    books.printLevelOrder(myfile2);
-  }
-  else cout << "Unable to open file";
+
+    if (myfile2.is_open()){
+        books.printLevelOrder(myfile2);
+    } else cout << "Unable to open file";
 
     myfile2.close();
-ofstream myfile3;
+    ofstream myfile3;
     myfile3.open("copy2.txt");
-    if (myfile3.is_open())
-  {
-    copys.printLevelOrder(myfile3);
-  }
-  else cout << "Unable to open file";
+    
+    if (myfile3.is_open()){
+        copys.printLevelOrder(myfile3);
+    } else cout << "Unable to open file";
 
     myfile3.close();
-
-
-
-
 }
-
 
 int main(){
     //configurations:
@@ -170,8 +145,6 @@ int main(){
                 //search users
                 //add new users
                 //delete old users
-
-
 
     //when ending, update the txt files 
     //testing code 

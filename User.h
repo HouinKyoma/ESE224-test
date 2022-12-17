@@ -25,7 +25,6 @@ class User{
     void setUsername(const string &username_) { username = username_;main_key = username;}
     void setType(int i){type = i;}
 
-
     //------------------operators---------------------------------------------------
     friend std::istream& operator>>(std::istream& is, User& rhs){
         string name, password;
@@ -41,17 +40,15 @@ class User{
     }
     bool operator<(const User& user2)const;
 
-
     //--------------------Constructors and virtual functions--------------------------
     User(){};
     virtual ~User(){};
     virtual int getType(){return NULL;};
 
-
     //------------------------other methods---------------------------
     std::string toString();
-
 };
+
 class Reader:public virtual User{
     private:
     vector<BookCopy> borrowedList;
@@ -72,9 +69,8 @@ class Reader:public virtual User{
     bool canBorrow()const;
     void clearReserve();
     int numBorrowed();
-
-    
 };
+
 class Student:public virtual Reader{
     public:
     Student(){};
@@ -89,8 +85,8 @@ class Student:public virtual Reader{
         return is;
     }
     int getType(){return 0;}
-
 };
+
 class Teacher:public virtual Reader{
     public:
     Teacher(){};
@@ -106,8 +102,8 @@ class Teacher:public virtual Reader{
         rhs.setUsername(name);
         return is;
     }
-    
 };
+
 class Librarian:public virtual User{
     //ALL subject to change
     public:
@@ -127,4 +123,3 @@ class Librarian:public virtual User{
         return is;
     }
 };
-

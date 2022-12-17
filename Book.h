@@ -3,6 +3,7 @@
 #include<vector>
 #include<iostream>
 #include<list>
+
 class User;
 using namespace std;
 class Reader;
@@ -14,8 +15,8 @@ class Book{
         string author;
         string category;
         string main_key = ISBN;
-        int favor;//we assume favorite count will not be saved and read from txt files
-        list<Reader> readers;//list of reservers
+        int favor; //we assume favorite count will not be saved and read from txt files
+        list<Reader> readers; //list of reservers
         vector<BookCopy> copyList;
     public:
         //----------------setter/getters--------------------
@@ -77,10 +78,8 @@ class Book{
         int sizeCopyList(){return copyList.size();}
         void removeCopy(int id);
         void addCopy(BookCopy& c);
-    
-
-        
 };
+
 class BookCopy{
     private:
         Book book;
@@ -130,11 +129,7 @@ class BookCopy{
             return is;
         }
         
-
-
-
         //--------getter/setters-------------------------
-
         Book getBook() const { return book; }
         void setBook(const Book &book_) { book = book_; }
         string getISBN() const{return isbn;}
@@ -160,11 +155,8 @@ class BookCopy{
         string getKey()const {return main_key;}
         void setKey(){main_key = to_string(ID);}
 
-
-
         //---------------------class methods--------------------
         std::string toString();
-       
 };
 /*
 
