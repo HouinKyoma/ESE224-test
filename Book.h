@@ -56,6 +56,9 @@ class Book{
 
             return is;
         }
+        Book& operator=(const Book& b){
+            return *this;
+        }
         //-------------------class methods----------------------
         void favorCount(){favor++;};
         void addReaderList(Reader& r){
@@ -70,9 +73,19 @@ class Book{
         std::string toString(); 
         Book(){
             favor = 0;
-
+            readers = list<Reader>();
             copyList = vector<BookCopy>();
         };
+        Book(const Book& book){
+            ISBN = book.getISBN();
+            title = book.getTitle();
+            author = book.getAuthor();
+            category = book.getCategory();
+            main_key = book.getKey();
+            favor = book.favor;
+            readers = book.readers;
+            copyList = book.copyList;
+        }
         ~Book(){};
         int sizeCopyList(){return copyList.size();}
         void removeCopy(int id);
@@ -107,9 +120,21 @@ class BookCopy{
             isbn = isbn_;
             
         }
+        BookCopy(const BookCopy& copy){
+            ID = copy.getID();
+            readerName = copy.getReaderName();
+            reserverName = copy.getReserverName();
+            isbn = copy.getISBN();
+            startDate = copy.getStartDate();
+            reserveDate = copy.getReserveDate();
+            expDate = copy.getExpDate();
+            main_key = copy.getKey();
+            book = copy.getBook();
+
+        }
         ~BookCopy(){};
     //---------------------operators--------------------
-        bool operator<(const BookCopy& book2)const;
+        //bool operator<(const BookCopy& book2)const;
         friend std::ostream &operator<<(std::ostream &os, const BookCopy &rhs) {
             os << "book: " << rhs.book
                << " ID: " << rhs.ID
@@ -130,7 +155,11 @@ class BookCopy{
             return is;
         }
         
-
+        friend bool operator<(const BookCopy& book1,const BookCopy& book2);
+	    friend bool operator>(const BookCopy& book1,const BookCopy& book2);
+	    friend bool operator<=(const BookCopy& book1, const BookCopy& book2);
+	    friend bool operator>=(const BookCopy& book1, const BookCopy& book2);
+	    friend bool operator==(const BookCopy& book1, const BookCopy& book2);
 
 
         //--------getter/setters-------------------------
@@ -164,6 +193,11 @@ class BookCopy{
 
         //---------------------class methods--------------------
         std::string toString();
+
+        static int partition(vector<BookCopy>& array, int low, int high);
+
+        static void quickSort(vector<BookCopy>& array, int low, int high);
+        static vector<BookCopy> transformVec(vector<BookCopy*>& array);
        
 };
 /*

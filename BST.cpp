@@ -264,23 +264,24 @@ void BST<Comparable>:: printLevelOrder(std::ofstream& os){
 }
 
 template <typename Comparable>
-vector<Comparable> BST<Comparable>::vectorize()const{
-     std::vector<Comparable> res = std::vector<Comparable>();
+vector<Comparable> BST<Comparable>::vectorize(){
+     std::vector<Comparable>* res = new std::vector<Comparable>();
      int h = height(root);
      int i;
      for (i = 1; i <= h; i++){
-         vectorizeCurrentLevel(root, i,res);
+         vectorizeCurrentLevel(root, i,*res);
      }
-     return res;
+     return *res;
 }
 
 
 template <typename Comparable>
-void BST<Comparable>::vectorizeCurrentLevel(BSTNode<Comparable>*t, int level, std::vector<Comparable>& vec)const{
+void BST<Comparable>::vectorizeCurrentLevel(BSTNode<Comparable>*&t, int level, std::vector<Comparable>& vec){
       if(t==nullptr){
      return;
    } 
    if(level == 1&&t->data->getKey()!=""){
+     //Comparable c = *(new Comparable(t->data));
      vec.push_back(t->data);
    }
    else if(level > 1){
@@ -288,3 +289,27 @@ void BST<Comparable>::vectorizeCurrentLevel(BSTNode<Comparable>*t, int level, st
      vectorizeCurrentLevel(t->right, level-1,vec);
    }
 }
+
+
+
+/**
+ * @brief this function is only usable when stored data type is BookCopy 
+ * 
+ * @tparam Comparable 
+ * @param searchArgs 
+ * @return std::vector<Comparable*> 
+ */
+template <typename Comparable>
+std::vector<Comparable> BST<Comparable>:: searchBook(std::vector<std::string>& searchArgs){
+     vector<BookCopy*> l = this->vectorize();
+     vector<BookCopy> list = BookCopy::transformVec(l);
+     //make the tree into a vector
+     BookCopy b = BookCopy();
+     BookCopy::quickSort(list,0,list.size()-1);
+     return l;
+
+     //quicksort the vector
+
+     //
+}
+

@@ -211,8 +211,13 @@ int main(){
     User* u = *(u1);
     users.remove(u);
     vector<BookCopy*>vec = copys.vectorize();
+    cout<<(*(vec[0])==*(vec[1]))<<endl;
+    cout<<(vec[0]->getBook())<<endl;
+    //BookCopy::quickSort(vec,0,vec.size());
     for(auto i:vec){
         cout<<*i<<endl;
     }
+    vector<string> searchargs = vector<string>();
+    copys.searchBook(searchargs);
     outputFile();
 }

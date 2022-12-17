@@ -125,6 +125,6 @@ class Librarian:public virtual User{
         rhs.setPassword(password);
         rhs.setUsername(name);
         return is;
-    }
+    };
 };
 
