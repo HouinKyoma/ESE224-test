@@ -13,6 +13,13 @@ BST<BookCopy*> copys;
 time_t startDate;
 time_t BookCopy::startTime;
 int BookCopy::IDassign = 1;
+//------------------function declarations----------------
+void searchBook();
+void borrowBook(Reader* r);
+void returnBook(Reader* r);
+void reserveBook(Reader* r);
+
+
 
 int dateCounter() {
 	time_t currentTime;
@@ -20,8 +27,81 @@ int dateCounter() {
 	return difftime(currentTime, startDate) / 5;//return the number of time passed in day;
 }
 
+void searchBook(){
+    vector<string> searchArgs = vector<string>(4);
+    system("clear");
+    cout<<"Please enter book information to search for books:"<<endl;
+    cout << "Enter title: ";
+    cin >> searchArgs[0];
+    cout << "Enter author: ";
+    cin >> searchArgs[1];
+    cout << "Enter category: ";
+    cin >> searchArgs[2];
+    cout << "Enter ISBN: ";
+    cin >> searchArgs[3];
+    vector<BookCopy> result = copys.searchBook(searchArgs);
+    printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n","Title","Author","Category","ISBN","ID","Status");
+    for(int i = 0; i<140;i++){cout<<"-";}
+    cout<<endl;
+    char yes[] = "YES";
+    char no[] = "NO";
+    for(auto copy:result){
+        bool status = copy.getReaderName()==""&&copy.getReserverName()=="";
+        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
+    }
+    //cout<<
+    //then print
 
 
+}
+
+void borrowBook(Reader* r){
+    int ID;
+    cout<<"Enter the ID of the book copy you want to borrow"<<endl;
+    cin>>ID;
+    r->borrowBook(ID,copys);
+}
+void returnBook(Reader* r){
+    int ID;
+    cout<<"Enter the ID of the book copy you want to return"<<endl;
+    cin>>ID;
+    r->returnBook(ID,copys);
+}
+
+void renewBook(Reader* r){
+    int ID;
+    cout<<"Enter the ID of the book copy you want to renew"<<endl;
+    cin>>ID;
+    r->renewBook(ID,copys);
+}
+
+void reserveBook(Reader* r){
+    string isbn;
+    cout<<"Enter the ISBN of the book copy you want to reserve"<<endl;
+    cin>>isbn;
+    r->reserveBook(isbn,books);
+}
+void cancelBook(Reader* r){
+    string isbn;
+    cout<<"Enter the ISBN of the book copy you want to cancel reserve"<<endl;
+    cin>>isbn;
+    r->cancelReserve(isbn,books);
+
+}
+void myInfo(Reader* r){}
+void myInfo(Librarian* l){}
+void changePassword(User* u ){
+    string newPassword, oldPassword;
+    cout<<"Enter your old password:";
+    cin>>oldPassword;
+    if(oldPassword!=(*u).getPassword()){
+        cout<<"Password does not match"<<endl;
+        return;
+    }
+    cout<<"Enter your new password:";
+    cin>>newPassword;
+    (*u).setPassword(newPassword);
+}
 /**
  * @brief function to read file into bst
  * To support polymorphism, a pointer to the object is used instead of object. 
@@ -100,7 +180,7 @@ void scanFile(){
 
         string isbn = copy->getISBN();
         Book** bpptr = books.search(isbn);
-        Book    b  = **(bpptr);
+        Book&    b  = **(bpptr);
         copy->setBook(b);
         b.addCopy(*copy);
         copy->setKey();
@@ -147,7 +227,102 @@ ofstream myfile3;
 
 
 }
+int login(Librarian*& l,Teacher*& t,Student*& s){
 
+    string name;
+    string password;
+    cout<<"Username: ";
+    cin>>name;
+    
+    User** u = users.search(name);
+    if(u== nullptr){
+        cout<<"User with name "<<name<<" does not exist."<<endl;
+        return -1;
+    }
+    
+    //convert to the according derived class
+    l =dynamic_cast<Librarian*>(*(u));
+    t =dynamic_cast<Teacher*>(*(u));
+    s =dynamic_cast<Student*>(*(u));
+    cout<<"Enter Password: ";
+    cin>>password;
+    if((*u)->getPassword() == password){    
+
+        if(l!=nullptr){
+            
+            return 2;
+        }
+        else if(t!=nullptr){
+            return 1;   
+        }
+        else if(s!=nullptr){
+            
+            return 0;
+        }
+    //check if user with the username exist
+    }
+    else{
+        cout<<"Incorrect password!"<<endl;
+        return -1;
+    }
+    
+
+}
+void printStudentMenu() {
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "-\t\t\tWelcome to My Library!\t\t\t-" << endl;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "\nWelcome back, Student" << endl;
+	cout << "\nPlease choose:" << endl;
+	cout << "\t1 -- Search Book" << endl;
+	cout << "\t2 -- Borrow Book" << endl;
+	cout << "\t3 -- Return Book" << endl;
+	cout << "\t4 -- Renew Book" << endl;
+    cout << "\t5 -- Reserve Book"<<endl;
+    cout << "\t6 -- Cancel Book" << endl;
+    cout << "\t7 -- My Information"<<endl;
+    cout << "\t8 -- Change Password"<<endl;
+    cout << "\t9 -- I'm Feeling Lucky"<<endl;
+	cout << "\t0 -- Log Out\n" << endl;
+}
+
+void studentSystem(Student* s){
+    int input;
+    do{
+        printStudentMenu();
+        cin>>input;
+        switch (input)
+        {
+        case 1:
+            searchBook();
+            break;
+        case 2:
+            borrowBook(s);
+            break;
+        case 3:
+            returnBook(s);
+            break;
+        case 4:
+            renewBook(s);
+            break;
+        case 5:
+            reserveBook(s);
+            break;
+        case 6:
+            cancelBook(s);
+            break;
+        case 7:
+            myInfo(s);
+            break;  
+        case 8:
+            changePassword(s);
+            break;
+        default:
+            break;
+        }
+    }while(input!=0);
+
+}
 
 int main(){
     //configurations:
@@ -156,6 +331,23 @@ int main(){
     time(&BookCopy::startTime);
     //Load from file
         //load into a BST
+    users = BST<User*>();
+    books = BST<Book*>();
+    copys = BST<BookCopy*>();
+    scanFile();
+    User** u2 = users.search("HaHa");
+    Student* stu =dynamic_cast<Student*>(*(u2));
+    borrowBook(stu);
+    Teacher* t;
+    Student* s;
+    Librarian* l;
+    string anyKey;
+    while(login(l,t,s)==-1){
+        cout<<"enter any character  to reenter"<<endl;
+        cin>>anyKey;
+        system("clear");
+    }
+
     
     //login
         //reader login
@@ -194,12 +386,31 @@ int main(){
     cout<<isbn2<<endl;
     cout<<(isbn<isbn2);*/
     //--------------------testing for file input ------------------
-    users = BST<User*>();
-    books = BST<Book*>();
-    copys = BST<BookCopy*>();
-    scanFile();
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //---------------------testing code--------------------------
     User** u1 = users.search("James");
-    User** u2 = users.search("HaHa");
+    //User** u2 = users.search("HaHa");
     cout<<endl;
     cout<<(**(u1)<**(u2));
     //User** u = users.search("Bob");
@@ -213,11 +424,19 @@ int main(){
     vector<BookCopy*>vec = copys.vectorize();
     cout<<(*(vec[0])==*(vec[1]))<<endl;
     cout<<(vec[0]->getBook())<<endl;
+    cout<<((*(vec[0])<*(vec[1])))<<endl;
+    vector<BookCopy> v = BookCopy::transformVec(vec);
+    cout<<v[0].getBook()<<endl;
     //BookCopy::quickSort(vec,0,vec.size());
     for(auto i:vec){
         cout<<*i<<endl;
     }
     vector<string> searchargs = vector<string>();
-    copys.searchBook(searchargs);
+    searchargs.push_back("First_Lessons_in_Bach");
+    searchargs.push_back("");
+    searchargs.push_back("");
+    searchargs.push_back("");
+    vector<BookCopy> testSearch = copys.searchBook(searchargs);
+    for(auto i: testSearch){cout<<i<<endl;}
     outputFile();
 }
