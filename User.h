@@ -69,6 +69,7 @@ class Reader:public virtual User{
     void renewBook(int id,BST<BookCopy*>& lib);
     void reserveBook(std::string isbn,BST<Book*>& lib);
     void cancelReserve(std::string isbn,BST<Book*>& lib);
+    vector<BookCopy> searchBook(vector<string>& searchArgs, vector<BookCopy>& list);
     bool canBorrow()const;
     void clearReserve();
     int numBorrowed();
@@ -77,7 +78,7 @@ class Reader:public virtual User{
 };
 class Student:public virtual Reader{
     public:
-    Student(){};
+    Student(){setMax_Copies();setMax_Period();};
     ~Student(){};
     void setMax_Copies(){MAX_COPIES = 5;};
     void setMax_Period(){MAX_BORROW_PERIOD = 10; };

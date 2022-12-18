@@ -35,7 +35,7 @@ void Reader::borrowBook(int id, BST<BookCopy*>& lib){
 
 
 
-    BookCopy borrowed = **(bcptr);
+    BookCopy& borrowed = **(bcptr);
 
     //check if already borrowed
 
@@ -102,7 +102,7 @@ void Reader::returnBook(int id,BST<BookCopy*>& lib){
     if(bcptr==nullptr){
         throw std::invalid_argument("the copy of the id does not exist in library.");
     }
-    BookCopy borrowed = **(bcptr);
+    BookCopy& borrowed = **(bcptr);
     //check if overdue
     if(borrowed.getExpDate()<currentDay){
         //TODO
@@ -146,7 +146,7 @@ void Reader::renewBook(int id,BST<BookCopy*>& lib){
     if(bcptr==nullptr){
         throw std::invalid_argument("the copy of the id does not exist in library.");
     }
-    BookCopy borrowed = **(bcptr);
+    BookCopy& borrowed = **(bcptr);
     if(borrowed.getBook().sizeReaderList()!=0){
         cout<<"This book has been reserved by others, can not extend its duration"<<endl;
         return;
@@ -156,14 +156,14 @@ void Reader::renewBook(int id,BST<BookCopy*>& lib){
 
 void Reader::reserveBook(std::string isbn,BST<Book*>& lib){
     Book** bpptr = lib.search(isbn);
-    Book reserved = **(bpptr);
+    Book& reserved = **(bpptr);
     reserved.addReaderList(*this);
     this->reservedList.push_back(reserved);
 
 }
 void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
     Book** bpptr = lib.search(isbn);
-    Book reserved = **(bpptr);
+    Book& reserved = **(bpptr);
     reserved.removeReaderList(*this);
 }
 /**
@@ -182,6 +182,7 @@ void Reader::clearReserve(){
 int Reader::numBorrowed(){
     return borrowedList.size();
 }
+
 
 
 

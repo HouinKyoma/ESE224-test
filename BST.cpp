@@ -296,17 +296,27 @@ void BST<Comparable>::vectorizeCurrentLevel(BSTNode<Comparable>*&t, int level, s
  * @brief this function is only usable when stored data type is BookCopy 
  * 
  * @tparam Comparable 
- * @param searchArgs 
- * @return std::vector<Comparable*> 
+ * @param searchArgs length must be 4, and each position can not be null
+ * @return std::vector<BookCopy> sorted vector of books found by search
  */
 template <typename Comparable>
-std::vector<Comparable> BST<Comparable>:: searchBook(std::vector<std::string>& searchArgs){
+std::vector<BookCopy> BST<Comparable>:: searchBook(std::vector<std::string>& searchKey){
      vector<BookCopy*> l = this->vectorize();
-     vector<BookCopy> list = BookCopy::transformVec(l);
+     vector<BookCopy> list1 = BookCopy::transformVec(l);
+     
+     //vector<BookCopy> list2 = BookCopy::transformVec(l);
      //make the tree into a vector
-     BookCopy b = BookCopy();
-     BookCopy::quickSort(list,0,list.size()-1);
-     return l;
+     vector<BookCopy> res;
+     for(auto i:list1){
+          if(i.getBook().getTitle()== searchKey[0]||i.getBook().getAuthor()==searchKey[1]||i.getBook().getCategory()==searchKey[2]||i.getISBN()==searchKey[3])
+          {    res.push_back(i);}
+     }
+
+
+
+     //sort(list1.begin(),list1.end());//using std
+     BookCopy::quickSort(res,0,res.size()-1);
+     return res;
 
      //quicksort the vector
 

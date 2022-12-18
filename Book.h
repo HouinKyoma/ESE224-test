@@ -56,9 +56,7 @@ class Book{
 
             return is;
         }
-        Book& operator=(const Book& b){
-            return *this;
-        }
+       
         //-------------------class methods----------------------
         void favorCount(){favor++;};
         void addReaderList(Reader& r){
@@ -120,7 +118,7 @@ class BookCopy{
             isbn = isbn_;
             
         }
-        BookCopy(const BookCopy& copy){
+        /*BookCopy(const BookCopy& copy){
             ID = copy.getID();
             readerName = copy.getReaderName();
             reserverName = copy.getReserverName();
@@ -131,7 +129,7 @@ class BookCopy{
             main_key = copy.getKey();
             book = copy.getBook();
 
-        }
+        }*/
         ~BookCopy(){};
     //---------------------operators--------------------
         //bool operator<(const BookCopy& book2)const;

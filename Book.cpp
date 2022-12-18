@@ -57,11 +57,12 @@ bool operator>=(const BookCopy& book1, const BookCopy& book2) {
 
 
 bool operator==(const BookCopy& book1,const BookCopy& book2) {
-	
+	//maybe need to add the comparison of times
 	return (book1.getBook().getISBN().compare(book2.getBook().getISBN())==0&&
 	book1.getBook().getTitle() == book2.getBook().getTitle()&&
 	book1.getBook().getAuthor() == book2.getBook().getAuthor()&&
-	book1.getBook().getCategory() == book2.getBook().getCategory());
+	book1.getBook().getCategory() == book2.getBook().getCategory()&&
+    book1.getID()==book2.getID());
 }
 
 
@@ -112,29 +113,39 @@ void Book::removeReaderList(Reader& r){
 int BookCopy::partition(vector<BookCopy>& array, int low, int high) {
 	// TODO
     //std::vector<BookCopy*>::iterator it = array.begin();
-    int i = low;
-    int j = high -2;
-    BookCopy pivot = array[high];
-    do{
-    while(array[i]<= pivot && i < high){
-        i++;
+   BookCopy pivot = array[low];
+
+    int count = 0;
+    for (int i = low + 1; i <= high; ++i) {
+        if (array[i] <= pivot) {
+            count++;
+        }
     }
-    while(array[j]>= pivot && j > low){
-        j--;
+
+    int pivotIndex = low + count;
+    auto temp = array[pivotIndex];
+    array[pivotIndex] = array[low];
+    array[low] = temp;
+
+    int i = low, j = high;
+
+    while (i < pivotIndex && j > pivotIndex) {
+        while (array[i] <= pivot) {
+            i++;
+        }
+
+        while (array[j] > pivot) {
+            j--;
+        }
+
+        if ( i < pivotIndex && j > pivotIndex) {
+            auto temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            i++; j--;
+        }
     }
-    if(i<j){
-        BookCopy tmp = array[i];
-        array[i] = array[j];
-        array[j] = tmp;
-    }
-    }
-    while(i<j);
-    if(array[i] > pivot){
-        BookCopy tmp = array[i];
-        array[i] = array[high];
-        array[high] = tmp;
-    }
-    return i;
+    return pivotIndex;
 }
 
 
@@ -178,10 +189,10 @@ void BookCopy::quickSort(vector<BookCopy>& array, int low, int high) {
         int pi = partition(array, low, high);
 
         // recursive call on the left of pivot
-        quickSort(array, low, pi - 0);
+        quickSort(array, low, pi - 1);
 
         // recursive call on the right of pivot
-        quickSort(array, pi + 0, high);
+        quickSort(array, pi + 1, high);
     }
 }
 vector<BookCopy> BookCopy:: transformVec(vector<BookCopy*>& array){

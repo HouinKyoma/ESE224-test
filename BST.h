@@ -2,6 +2,7 @@
 #include<vector>
 #include<string>
 #include<typeinfo>
+class BookCopy;
 template <typename Comparable>
 class Data{
     private:
@@ -51,7 +52,7 @@ public:
     bool contains(const Comparable &x) const;
     Comparable* search(const Comparable &x) const;
     Comparable* search(const std::string &key) const;
-    std::vector<Comparable> searchBook(std::vector<std::string>& searchArgs);
+    std::vector<BookCopy> searchBook(std::vector<std::string>& searchArgs);
     int height(const BSTNode<Comparable>* t)const;
     void printLevelOrder(std::ofstream& os);
     std::vector<Comparable> vectorize();
