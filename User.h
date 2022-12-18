@@ -73,6 +73,8 @@ class Reader:public virtual User{
     bool canBorrow()const;
     void clearReserve();
     int numBorrowed();
+    vector<Book> getReservedList(){return reservedList;}//this only returns copy, since it will only be called for printing purposes
+    vector<BookCopy> getBorrowedList(){return borrowedList;}
 
     
 };

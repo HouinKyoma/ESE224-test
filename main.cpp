@@ -88,8 +88,39 @@ void cancelBook(Reader* r){
     r->cancelReserve(isbn,books);
 
 }
-void myInfo(Reader* r){}
+/**
+ * @brief student version for printing all the information of a user, including name, account type, list of borrowed book, list of reservation
+ * 
+ * @param s a pointer of Student object
+ */
+void myInfo(Student* s){
+    time_t currentTime;
+    time(&currentTime);
+     char yes[] = "YES";
+    char no[] = "NO";
+    int currentDay = (currentTime-startDate)/5;
+
+    cout<<"Account Type: Student"<<endl;
+    cout<<"Username: "<< s->getUsername()<<endl;
+    //cout<<"Penalty: "<<
+    cout<<"List of borrowed book:"<<endl;
+    printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n","Title","Author","Category","ISBN","ID","Overdue?");
+    for(int i = 0; i<140;i++){cout<<"-";}
+    cout<<endl;
+    for(auto copy:s->getBorrowedList()){
+        bool status = copy.getExpDate()<currentDay;//when current day past the expday, it is overdue, true = overdue, false = not overdue
+        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
+    }   
+    cout<<"List of book reservation:"<<endl;
+    for(auto book:s->getReservedList()){
+        cout<<book.getTitle()<<endl;
+    }
+
+}
 void myInfo(Librarian* l){}
+
+
+
 void changePassword(User* u ){
     string newPassword, oldPassword;
     cout<<"Enter your old password:";
@@ -268,9 +299,32 @@ int login(Librarian*& l,Teacher*& t,Student*& s){
     
 
 }
-void printStudentMenu() {
+void printLibrarianMenu(){
+    time_t currentTime;
+    time(&currentTime);
+    int currentDay = (currentTime-startDate)/5;
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "-\t\t\tWelcome to My Library!\t\t\t-" << endl;
+    cout << "-\t\t\tCurrent day: "<<currentDay<<endl;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "\nWelcome back, Student" << endl;
+	cout << "\nPlease choose:" << endl;
+	cout << "\t1 -- Add Book" << endl;
+	cout << "\t2 -- Delete Book" << endl;
+	cout << "\t3 -- Search Users" << endl;
+	cout << "\t4 -- Add Users" << endl;
+    cout << "\t5 -- Delete Users"<<endl;
+    cout << "\t6 -- My Information" << endl;
+    cout << "\t8 -- Change Password"<<endl;
+	cout << "\t0 -- Log Out\n" << endl;
+}
+void printStudentMenu() {
+    time_t currentTime;
+    time(&currentTime);
+    int currentDay = (currentTime-startDate)/5;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "-\t\t\tWelcome to My Library!\t\t\t-" << endl;
+    cout << "-\t\t\tCurrent day: "<<currentDay<<endl;
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "\nWelcome back, Student" << endl;
 	cout << "\nPlease choose:" << endl;
@@ -323,6 +377,41 @@ void studentSystem(Student* s){
     }while(input!=0);
 
 }
+void librarianSystem(Librarian* l){
+    int input;
+    do{
+        printStudentMenu();
+        cin>>input;
+        switch (input)
+        {
+        case 1:
+            l->addBook(books,copys);
+            break;
+        case 2:
+            deleteBook(l);
+            break;
+        case 3:
+            searchUser();
+            break;
+        case 4:
+            l->addUser(users);
+            break;
+        case 5:
+            deleteUser(l);
+            break;
+        case 6:
+            myInfo(l);
+
+            break;
+        case 7:
+
+            changePassword(l);
+            break;  
+        default:
+            break;
+        }
+    }while(input!=0);
+}
 
 int main(){
     //configurations:
@@ -337,7 +426,7 @@ int main(){
     scanFile();
     User** u2 = users.search("HaHa");
     Student* stu =dynamic_cast<Student*>(*(u2));
-    borrowBook(stu);
+    //borrowBook(stu);
     Teacher* t;
     Student* s;
     Librarian* l;
@@ -348,7 +437,9 @@ int main(){
         system("clear");
     }
 
-    
+    if(s!=nullptr){
+        studentSystem(s);
+    }
     //login
         //reader login
             //print reader menu
@@ -366,28 +457,7 @@ int main(){
 
 
     //when ending, update the txt files 
-    //testing code 
-    /*BST<int> bst = BST<int>();
-    bst.insert(1);
-    bst.insert(3);
-    bst.insert(10);
-    bst.remove(1);
-    bst.insert(0);
-    bst.remove(3);
-    int rest = *(bst.search(10));
-    cout<<"search: "<<rest<<endl;
-    cout<<bst.contains(10)<<endl;
-    cout<<bst.contains(8);
-    string s = "9781283329705";
-    string s2 = "9781493938438	";
-    long int isbn = stol(s);
-    long int isbn2 = stol(s2);
-    cout<<isbn;
-    cout<<isbn2<<endl;
-    cout<<(isbn<isbn2);*/
-    //--------------------testing for file input ------------------
     
-
 
 
 
