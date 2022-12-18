@@ -19,6 +19,8 @@ void borrowBook(Reader* r);
 void returnBook(Reader* r);
 void reserveBook(Reader* r);
 
+void deleteBook(Librarian* l);
+void deleteUser(Librarian* l);
 
 
 int dateCounter() {
@@ -88,12 +90,28 @@ void cancelBook(Reader* r){
     r->cancelReserve(isbn,books);
 
 }
+
+
+void deleteBook(Librarian* l){
+    int ID;
+    cout<<"Enter the ID of the book to be removed"<<endl;
+    cin>>ID;
+    l->deleteBook(ID,books,copys);
+}
+
+void deleteUser(Librarian* l){
+    string name;
+    cout<<"Enter the name of the user to be removed" <<endl;
+    cin>>name;
+    l->deleteUser(name, users);
+}
+
 /**
  * @brief student version for printing all the information of a user, including name, account type, list of borrowed book, list of reservation
  * 
  * @param s a pointer of Student object
  */
-void myInfo(Student* s){
+void myInfo(Reader* s){
     time_t currentTime;
     time(&currentTime);
      char yes[] = "YES";
@@ -318,15 +336,16 @@ void printLibrarianMenu(){
     cout << "\t8 -- Change Password"<<endl;
 	cout << "\t0 -- Log Out\n" << endl;
 }
-void printStudentMenu() {
+void printStudentMenu(bool isTeacher) {
     time_t currentTime;
     time(&currentTime);
     int currentDay = (currentTime-startDate)/5;
+    
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "-\t\t\tWelcome to My Library!\t\t\t-" << endl;
     cout << "-\t\t\tCurrent day: "<<currentDay<<endl;
 	cout << "-----------------------------------------------------------------" << endl;
-	cout << "\nWelcome back, Student" << endl;
+	cout << "\nWelcome back, "<<(isTeacher?"Teacher": "Student") << endl;
 	cout << "\nPlease choose:" << endl;
 	cout << "\t1 -- Search Book" << endl;
 	cout << "\t2 -- Borrow Book" << endl;
@@ -340,10 +359,11 @@ void printStudentMenu() {
 	cout << "\t0 -- Log Out\n" << endl;
 }
 
-void studentSystem(Student* s){
+void studentSystem(Reader* s){
     int input;
+    bool isTeacher = s->getType()==1;
     do{
-        printStudentMenu();
+        printStudentMenu(isTeacher);
         cin>>input;
         switch (input)
         {
@@ -380,7 +400,7 @@ void studentSystem(Student* s){
 void librarianSystem(Librarian* l){
     int input;
     do{
-        printStudentMenu();
+        printLibrarianMenu();
         cin>>input;
         switch (input)
         {
@@ -391,7 +411,7 @@ void librarianSystem(Librarian* l){
             deleteBook(l);
             break;
         case 3:
-            searchUser();
+            l->searchUser(users);
             break;
         case 4:
             l->addUser(users);
@@ -424,8 +444,8 @@ int main(){
     books = BST<Book*>();
     copys = BST<BookCopy*>();
     scanFile();
-    User** u2 = users.search("HaHa");
-    Student* stu =dynamic_cast<Student*>(*(u2));
+    //User** u2 = users.search("HaHa");
+    //Student* stu =dynamic_cast<Student*>(*(u2));
     //borrowBook(stu);
     Teacher* t;
     Student* s;
@@ -440,6 +460,15 @@ int main(){
     if(s!=nullptr){
         studentSystem(s);
     }
+    else if(t!=nullptr){
+        studentSystem(t);
+    }
+    else if(l!=nullptr){
+        librarianSystem(l);
+    }
+
+    cout<<"Quitting... outputing files..."<<endl;
+    outputFile();
     //login
         //reader login
             //print reader menu
@@ -476,7 +505,7 @@ int main(){
 
 
 
-
+    /*
 
     //---------------------testing code--------------------------
     User** u1 = users.search("James");
@@ -509,4 +538,7 @@ int main(){
     vector<BookCopy> testSearch = copys.searchBook(searchargs);
     for(auto i: testSearch){cout<<i<<endl;}
     outputFile();
+
+
+    */
 }

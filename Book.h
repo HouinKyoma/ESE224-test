@@ -74,6 +74,7 @@ class Book{
             readers = list<Reader>();
             copyList = vector<BookCopy>();
         };
+        /*
         Book(const Book& book){
             ISBN = book.getISBN();
             title = book.getTitle();
@@ -83,7 +84,7 @@ class Book{
             favor = book.favor;
             readers = book.readers;
             copyList = book.copyList;
-        }
+        }*/
         ~Book(){};
         int sizeCopyList(){return copyList.size();}
         void removeCopy(int id);

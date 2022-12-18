@@ -96,7 +96,7 @@ class Student:public virtual Reader{
 };
 class Teacher:public virtual Reader{
     public:
-    Teacher(){};
+    Teacher(){setMax_Period();setMax_Copies();};
     ~Teacher(){};
     void setMax_Copies(){MAX_COPIES = 10;};
     void setMax_Period(){MAX_BORROW_PERIOD = 20;};
@@ -120,7 +120,7 @@ class Librarian:public virtual User{
     void addBook(BST<Book*>& lib,BST<BookCopy*>& copys);
     void deleteUser(std::string name, BST<User*>& list); 
     void deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys);
-    void searchUser();
+    void searchUser(BST<User*>& list);
     int getType(){return 2;};
     friend std::istream& operator>>(std::istream& is, Librarian& rhs){
         string name, password;

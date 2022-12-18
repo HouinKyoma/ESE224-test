@@ -104,6 +104,16 @@ void Reader::returnBook(int id,BST<BookCopy*>& lib){
     }
     BookCopy& borrowed = **(bcptr);
     //check if overdue
+    bool isBorrowed = false;//whether or not the user borrowed the book with the id
+    for(auto book:borrowedList){
+        if(book.getID()==id){
+           isBorrowed = true; 
+        }
+    }
+    if(!isBorrowed){
+        cout<<"You did not borrow this copy."<<endl;
+        return;
+    }
     if(borrowed.getExpDate()<currentDay){
         //TODO
         //add penalty
@@ -310,9 +320,39 @@ void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){
     }
     copys.remove(*cptr);
 }
-void Librarian:: searchUser(){
+void Librarian:: searchUser(BST<User*>& list){
     std::string username;
     std::cout<<"input username to search:"<<std::endl;
     std::cin>>username;
+    time_t currentTime;
+    time(&currentTime);
+    int currentDay = difftime(currentTime,BookCopy::startTime)/5;
     //TODO copy the code from delete user, since shares the same structure
+    User** uptr = list.search(username);
+    if(uptr==nullptr){std::cerr<<"the user with the name does not exist."<<std::endl;return;}
+    Librarian* l =dynamic_cast<Librarian*>(*(uptr));
+    Reader* t =dynamic_cast<Reader*>(*(uptr));
+    if(l!=nullptr){
+        //since not reader just remove
+        std::cout<<"Username: "<<l->getUsername()<<std::endl;
+        std::cout<<"Password:" <<l->getPassword()<<std::endl;
+        std::cout<<"Account type:"<<" Librarian"<<std::endl;
+        
+        return;
+    }
+    else if(t!=nullptr){
+        bool isTeacher = t->getType()==1;
+        std::cout<<"Username: "<<t->getUsername()<<std::endl;
+        std::cout<<"Password:" <<t->getPassword()<<std::endl;
+        std::cout<<"Account type:"<<(isTeacher?"Teacher":"Student")<<std::endl;
+        std::cout<<"List of Borrowed Book:"<<std::endl;
+        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n","Title","Author","Category","ISBN","ID","Overdue?");
+        for(int i = 0; i<140;i++){cout<<"-";}
+            cout<<endl;
+        for(auto copy:t->getBorrowedList()){
+            bool status = copy.getExpDate()<currentDay;//when current day past the expday, it is overdue, true = overdue, false = not overdue
+            printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),(status?"YES":"NO"));
+        }
+        return;   
+    }
 }
