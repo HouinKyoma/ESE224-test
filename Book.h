@@ -56,6 +56,7 @@ class Book{
 
             return is;
         }
+        
        
         //-------------------class methods----------------------
         void favorCount(){favor++;};
@@ -95,7 +96,7 @@ class Book{
 };
 class BookCopy{
     private:
-        Book book;
+        Book* book;
         int ID;
         string isbn;//for temp input<< purpose
         string readerName;
@@ -163,8 +164,8 @@ class BookCopy{
 
         //--------getter/setters-------------------------
 
-        Book getBook() const { return book; }
-        void setBook(const Book &book_) { book = book_; }
+        Book* getBook() const { return book; }
+        void setBook(Book *book_) { book = book_; }
         string getISBN() const{return isbn;}
         void setISBN(const string &isbn_) {isbn = isbn_; }
         int getID() const { return ID; }

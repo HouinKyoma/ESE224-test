@@ -308,7 +308,7 @@ std::vector<BookCopy> BST<Comparable>:: searchBook(std::vector<std::string>& sea
      //make the tree into a vector
      vector<BookCopy> res;
      for(auto i:list1){
-          if(i.getBook().getTitle()== searchKey[0]||i.getBook().getAuthor()==searchKey[1]||i.getBook().getCategory()==searchKey[2]||i.getISBN()==searchKey[3])
+          if(i.getBook()->getTitle()== searchKey[0]||i.getBook()->getAuthor()==searchKey[1]||i.getBook()->getCategory()==searchKey[2]||i.getISBN()==searchKey[3])
           {    res.push_back(i);}
      }
 

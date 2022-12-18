@@ -28,10 +28,10 @@ bool operator<(const BookCopy& book1,const BookCopy& book2){
 	if((book1.getExpDate()-currentDay)>(book2.getExpDate()-currentDay)){
 		return true;//2 rank by which book is closer to expiration date
 	}
-	if(book1.getBook().getTitle().compare(book2.getBook().getTitle())<0){
+	if(book1.getBook()->getTitle().compare(book2.getBook()->getTitle())<0){
 		return false;
 	}
-	if(book1.getBook().getAuthor().compare(book2.getBook().getAuthor())<0){
+	if(book1.getBook()->getAuthor().compare(book2.getBook()->getAuthor())<0){
 		return false;
 	}
 	if(book1.getISBN().compare(book2.getISBN())<0){
@@ -58,10 +58,10 @@ bool operator>=(const BookCopy& book1, const BookCopy& book2) {
 
 bool operator==(const BookCopy& book1,const BookCopy& book2) {
 	//maybe need to add the comparison of times
-	return (book1.getBook().getISBN().compare(book2.getBook().getISBN())==0&&
-	book1.getBook().getTitle() == book2.getBook().getTitle()&&
-	book1.getBook().getAuthor() == book2.getBook().getAuthor()&&
-	book1.getBook().getCategory() == book2.getBook().getCategory()&&
+	return (book1.getBook()->getISBN().compare(book2.getBook()->getISBN())==0&&
+	book1.getBook()->getTitle() == book2.getBook()->getTitle()&&
+	book1.getBook()->getAuthor() == book2.getBook()->getAuthor()&&
+	book1.getBook()->getCategory() == book2.getBook()->getCategory()&&
     book1.getID()==book2.getID());
 }
 

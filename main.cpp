@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<ctime>
+#include<string>
 #include"BST.h"
 #include"BST.cpp"
 #include"Book.h"
@@ -49,7 +50,7 @@ void searchBook(){
     char no[] = "NO";
     for(auto copy:result){
         bool status = copy.getReaderName()==""&&copy.getReserverName()=="";
-        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
+        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook()->getTitle().c_str(),copy.getBook()->getAuthor().c_str(),copy.getBook()->getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
     }
     //cout<<
     //then print
@@ -112,6 +113,7 @@ void deleteUser(Librarian* l){
  * @param s a pointer of Student object
  */
 void myInfo(Reader* s){
+    system("clear");
     time_t currentTime;
     time(&currentTime);
      char yes[] = "YES";
@@ -127,12 +129,15 @@ void myInfo(Reader* s){
     cout<<endl;
     for(auto copy:s->getBorrowedList()){
         bool status = copy.getExpDate()<currentDay;//when current day past the expday, it is overdue, true = overdue, false = not overdue
-        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
+        printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook()->getTitle().c_str(),copy.getBook()->getAuthor().c_str(),copy.getBook()->getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),status?yes:no);
     }   
     cout<<"List of book reservation:"<<endl;
     for(auto book:s->getReservedList()){
         cout<<book.getTitle()<<endl;
     }
+    string chr;
+    cout<<"Enter any character to go back to main menu"<<endl;
+    cin>>chr;
 
 }
 void myInfo(Librarian* l){}
@@ -229,9 +234,9 @@ void scanFile(){
 
         string isbn = copy->getISBN();
         Book** bpptr = books.search(isbn);
-        Book&    b  = **(bpptr);
+        Book*&    b  = *(bpptr);
         copy->setBook(b);
-        b.addCopy(*copy);
+        b->addCopy(*copy);
         copy->setKey();
 
         copys.insert(copy);
@@ -451,22 +456,28 @@ int main(){
     Student* s;
     Librarian* l;
     string anyKey;
-    while(login(l,t,s)==-1){
-        cout<<"enter any character  to reenter"<<endl;
-        cin>>anyKey;
-        system("clear");
-    }
+    char c;
+    while(true){
+        cout<<"type q to quit, any other character to login:"<<endl;
+        cin>>c;
+        if(c=='q'||c=='Q'){break;}
+        while(login(l,t,s)==-1){
+            cout<<"enter any character  to reenter"<<endl;
+            cin>>anyKey;
+            system("clear");
+        }
 
-    if(s!=nullptr){
-        studentSystem(s);
+        if(s!=nullptr){
+            studentSystem(s);
+        }
+        else if(t!=nullptr){
+            studentSystem(t);
+        }
+        else if(l!=nullptr){
+            librarianSystem(l);
+        }
     }
-    else if(t!=nullptr){
-        studentSystem(t);
-    }
-    else if(l!=nullptr){
-        librarianSystem(l);
-    }
-
+    Book** test =  books.search("sss");
     cout<<"Quitting... outputing files..."<<endl;
     outputFile();
     //login

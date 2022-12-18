@@ -56,11 +56,12 @@ void Reader::borrowBook(int id, BST<BookCopy*>& lib){
     time(&currentTime);
     borrowed.setStartDate((currentTime-BookCopy::startTime)/5);//this gives the day that the book was borrowed, day start at day 0, 5 sec = 1 day
     borrowed.setExpDate(((currentTime-BookCopy::startTime)/5)+MAX_BORROW_PERIOD);
+
+    borrowed.setReaderName(this->getUsername());//add to the BookCopy readerName
     this->borrowedList.push_back(borrowed);
     //borrowed.getBook().addReaderList(*this);//add to the Book class reader list
-    borrowed.setReaderName(this->getUsername());//add to the BookCopy readerName
 
-    cout<<"You have successfully borrowed the book "<<borrowed.getBook().getTitle()<<" ."<<endl;
+    cout<<"You have successfully borrowed the book "<<borrowed.getBook()->getTitle()<<" ."<<endl;
 
 }
 /**
@@ -103,17 +104,30 @@ void Reader::returnBook(int id,BST<BookCopy*>& lib){
         throw std::invalid_argument("the copy of the id does not exist in library.");
     }
     BookCopy& borrowed = **(bcptr);
+    //cout<<borrowedList.size();
+    //cout<<borrowedList[0];
     //check if overdue
+    
     bool isBorrowed = false;//whether or not the user borrowed the book with the id
+    /*
     for(auto book:borrowedList){
         if(book.getID()==id){
            isBorrowed = true; 
         }
     }
-    if(!isBorrowed){
+    */
+    for(int i = 0;i<borrowedList.size();i++){
+        if(borrowedList[i].getID()==id){
+            isBorrowed = true;
+        }
+    }
+    
+    if(isBorrowed==false){
         cout<<"You did not borrow this copy."<<endl;
         return;
     }
+    
+    
     if(borrowed.getExpDate()<currentDay){
         //TODO
         //add penalty
@@ -132,8 +146,8 @@ void Reader::returnBook(int id,BST<BookCopy*>& lib){
         it++;
     }
     //check the reserver list.
-    if(borrowed.getBook().sizeReaderList()!=0){
-        Reader r = borrowed.getBook().popReaderList();
+    if(borrowed.getBook()->sizeReaderList()!=0){
+        Reader r = borrowed.getBook()->popReaderList();
         borrowed.setReserverName(r.getUsername());
         borrowed.setReserveDate(currentDay);
     }
@@ -142,7 +156,7 @@ void Reader::returnBook(int id,BST<BookCopy*>& lib){
     std::cout<<"Do you like the book you just returned?(y/n)"<<endl;
     char c;
     std::cin>>c;
-    if(c=='Y'||c=='y'){borrowed.getBook().favorCount();}
+    if(c=='Y'||c=='y'){borrowed.getBook()->favorCount();}
     
 
 
@@ -156,12 +170,26 @@ void Reader::renewBook(int id,BST<BookCopy*>& lib){
     if(bcptr==nullptr){
         throw std::invalid_argument("the copy of the id does not exist in library.");
     }
+
+    //--------------check if borrowed-----------------
+    bool isBorrowed = false;
+    for(int i = 0;i<borrowedList.size();i++){
+        if(borrowedList[i].getID()==id){
+            isBorrowed = true;
+        }
+    }
+    
+    if(isBorrowed==false){
+        cout<<"You did not borrow this copy."<<endl;
+        return;
+    }
+    //-----------------------------------------
     BookCopy& borrowed = **(bcptr);
-    if(borrowed.getBook().sizeReaderList()!=0){
+    if(borrowed.getBook()->sizeReaderList()!=0){
         cout<<"This book has been reserved by others, can not extend its duration"<<endl;
         return;
     }
-    borrowed.setExpDate(borrowed.getExpDate()+this->MAX_BORROW_PERIOD);
+    borrowed.setExpDate(currentDay+this->MAX_BORROW_PERIOD);
 }
 
 void Reader::reserveBook(std::string isbn,BST<Book*>& lib){
@@ -175,6 +203,13 @@ void Reader::cancelReserve(std::string isbn, BST<Book*>& lib){
     Book** bpptr = lib.search(isbn);
     Book& reserved = **(bpptr);
     reserved.removeReaderList(*this);
+    int i;
+    for(i=0;i<reservedList.size();i++){
+        if(reservedList[i].getISBN()==isbn){
+            break;
+        }
+    }
+    reservedList.erase(reservedList.begin()+i);
 }
 /**
  * @brief this function must be used when delete a reader, iterate through the reserved list of reader, and remove the Book object from the vector, and linkedlist of Book class readerlist
@@ -257,11 +292,12 @@ void Librarian:: addBook(BST<Book*>& lib,BST<BookCopy*>& copys){
         BookCopy* newCopy = new BookCopy(isbn);
         if(bpptr != nullptr){
             
-            Book addedBook = **(bpptr);
-            addedBook.addCopy(*newCopy);//add the book to the copy list;
+            Book*& addedBook = *(bpptr);
+            addedBook->addCopy(*newCopy);//add the book to the copy list;
             newCopy->setBook(addedBook);
+            newCopy->setKey();
             copys.insert(newCopy);
-            std::cout<<"A new copy has been added to book "<<addedBook.getTitle()<<endl;
+            std::cout<<"A new copy has been added to book "<<addedBook->getTitle()<<endl;
         }
         else{
             Book* newBook = new Book();
@@ -269,8 +305,10 @@ void Librarian:: addBook(BST<Book*>& lib,BST<BookCopy*>& copys){
             newBook->setISBN(isbn);
             newBook->setCategory(category);
             newBook->setTitle(title);
+            newBook->setKey();
             lib.insert(newBook);
-            newCopy->setBook(*newBook);
+            Book** test = lib.search(isbn);
+            newCopy->setBook(newBook);
             newBook->addCopy(*newCopy);
             copys.insert(newCopy);
             std::cout<<" The book with name "<<newBook->getTitle()<<" and a new copy is added to the library."<<endl;
@@ -309,10 +347,10 @@ void Librarian:: deleteUser(std::string name, BST<User*>& list){
 void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){
     BookCopy** cptr = copys.search(to_string(id));
     if(cptr == nullptr){std::cerr<<"the copy with the id does not exist!"<<std::endl;}
-    BookCopy deleteCopy = **(cptr);
-    deleteCopy.getBook().removeCopy(id); // remove the copy from its Book
+    BookCopy& deleteCopy = **(cptr);
+    deleteCopy.getBook()->removeCopy(id); // remove the copy from its Book
     std::cout<<"BookCopy "<<deleteCopy.getID()<<" has been deleted from Copy list."<<std::endl;
-    if(deleteCopy.getBook().sizeCopyList()==0){//if there is no copy left from that book
+    if(deleteCopy.getBook()->sizeCopyList()==0){//if there is no copy left from that book
         //what should the behavior of the user who reserved the book be? this is sth unspecified in doc
         Book** deleteBook = lib.search(deleteCopy.getISBN());
         lib.remove(*(deleteBook));
@@ -351,7 +389,7 @@ void Librarian:: searchUser(BST<User*>& list){
             cout<<endl;
         for(auto copy:t->getBorrowedList()){
             bool status = copy.getExpDate()<currentDay;//when current day past the expday, it is overdue, true = overdue, false = not overdue
-            printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook().getTitle().c_str(),copy.getBook().getAuthor().c_str(),copy.getBook().getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),(status?"YES":"NO"));
+            printf("%-35s|%-30s|%-20s|%-20s|%-5s|%-10s\n",copy.getBook()->getTitle().c_str(),copy.getBook()->getAuthor().c_str(),copy.getBook()->getCategory().c_str(),copy.getISBN().c_str(),copy.getKey().c_str(),(status?"YES":"NO"));
         }
         return;   
     }
