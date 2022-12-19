@@ -319,7 +319,8 @@ void Librarian:: addBook(BST<Book*>& lib,BST<BookCopy*>& copys){
 void Librarian:: deleteUser(std::string name, BST<User*>& list){
     //check if the student have any copy left
     User** uptr = list.search(name);
-    if(uptr==nullptr){std::cerr<<"the user with the name does not exist."<<std::endl;return;}
+    bool exist = uptr != nullptr;
+    if(!exist){std::cerr<<"the user with the name does not exist."<<std::endl;return;}
     Librarian* l =dynamic_cast<Librarian*>(*(uptr));
     Reader* t =dynamic_cast<Reader*>(*(uptr));
     if(l!=nullptr){
@@ -346,7 +347,8 @@ void Librarian:: deleteUser(std::string name, BST<User*>& list){
 }
 void Librarian:: deleteBook(int id, BST<Book*>& lib, BST<BookCopy*>& copys){
     BookCopy** cptr = copys.search(to_string(id));
-    if(cptr == nullptr){std::cerr<<"the copy with the id does not exist!"<<std::endl;}
+    bool exist = cptr!= nullptr;
+    if(!exist){std::cerr<<"the copy with the id does not exist!"<<std::endl;return;}
     BookCopy& deleteCopy = **(cptr);
     deleteCopy.getBook()->removeCopy(id); // remove the copy from its Book
     std::cout<<"BookCopy "<<deleteCopy.getID()<<" has been deleted from Copy list."<<std::endl;
