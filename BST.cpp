@@ -224,7 +224,7 @@ void BST<Comparable>:: printCurrentLevel(BSTNode<Comparable>*t, int level,std::o
    if(t==nullptr){
      return;
    } 
-   if(level == 1){
+   if(level == 1&&t->data->getKey()!=""){
      os<<toString(t->data)<<std::endl;
    }
    else if(level > 1){
